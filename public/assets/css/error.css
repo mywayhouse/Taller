@@ -1,0 +1,46 @@
+/* ============================================================
+   error.css — Estilos para páginas de error (404, 500, etc.)
+   ============================================================ */
+
+.error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f4f6f9;
+}
+
+.error-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.error-container h1 {
+    font-size: 100px;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.error-container h2 {
+    font-size: 24px;
+    color: #475569;
+    margin-bottom: 12px;
+}
+
+.error-container p {
+    font-size: 15px;
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.error-container .btn {
+    background: #2563eb;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 6px;
+}
+
+.error-container .btn:hover {
+    background: #1d4ed8;
+    text-decoration: none;
+}
