@@ -1,0 +1,21 @@
+# ============================================================
+# .htaccess — RAÍZ DEL PROYECTO
+# ============================================================
+# Propósito: Redirigir TODAS las peticiones HTTP hacia la
+# carpeta /public/ para que el Front Controller (index.php)
+# ubicado allí maneje el enrutamiento limpio (URLs amigables).
+# ============================================================
+
+<IfModule mod_rewrite.c>
+    # Activar el motor de reescritura de URLs de Apache
+    RewriteEngine On
+
+    # ----------------------------------------------------------
+    # Regla base: Redirigir todo al subdirectorio /public/
+    # ----------------------------------------------------------
+    # La regla dice: toma la URI solicitada (sin el prefijo del
+    # directorio actual) y pásala como parámetro "url" al
+    # index.php de /public/. [QSA] conserva los query strings
+    # adicionales (?x=1), [L] indica que es la última regla.
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

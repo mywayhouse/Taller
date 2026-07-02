@@ -1,0 +1,37 @@
+# ============================================================
+# .htaccess — CARPETA /public/
+# ============================================================
+# Propósito: Si el archivo o directorio solicitado existe
+# físicamente (ej: public/assets/css/app.css), que lo sirva
+# directamente. Si NO existe, redirige TODO al Front Controller
+# (index.php) para que el Router procese la URL amigable.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # ----------------------------------------------------------
+    # Permite el acceso directo a archivos reales (CSS, JS, IMG)
+    # y directorios existentes, sin pasar por el Front Controller.
+    # ----------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # ----------------------------------------------------------
+    # Si no es archivo ni directorio real, envía todo al
+    # Front Controller. La variable "url" capturará la ruta
+    # solicitada (ej: clientes/listar).
+    # ----------------------------------------------------------
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
+
+# --------------------------------------------------------------
+# Seguridad: Proteger archivos sensibles
+# --------------------------------------------------------------
+# Evita que se listen los directorios si no hay index
+Options -Indexes
+
+# Bloquear acceso directo a archivos de configuración y código
+<FilesMatch "\.(env|sql|log|ini|md|json)$">
+    Require all denied
+</FilesMatch>

@@ -1,0 +1,29 @@
+# ============================================================
+# .gitignore — Archivos y carpetas que NO se suben al repo
+# ============================================================
+
+# Entorno y configuraciones sensibles
+.env
+config/config.local.php
+
+# Logs y archivos temporales
+storage/logs/*
+!storage/logs/.gitkeep
+
+storage/backups/*
+!storage/backups/.gitkeep
+
+storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Uploads de usuarios
+public/uploads/*
+
+# Dependencias del proyecto (si se usara Composer)
+/vendor/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+*.sql
