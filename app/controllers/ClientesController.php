@@ -1,15 +1,4 @@
 <?php
-// ============================================================
-// ClientesController.php — CRUD de Clientes
-// ============================================================
-// Controlador para la gestión de clientes del taller.
-// Cada método se mapea desde la URL:
-//   /clientes        -> index()
-//   /clientes/crear  -> crear()
-//   /clientes/editar/5 -> editar(5)
-//   /clientes/eliminar/5 -> eliminar(5)
-// ============================================================
-
 namespace app\controllers;
 
 use Controller;
@@ -25,12 +14,10 @@ class ClientesController extends Controller
         $this->clienteModel = new Cliente();
     }
 
-    /**
-     * Listado de clientes.
-     * GET /clientes
-     */
     public function index(): void
     {
+        $this->requireAccess('clientes');
+
         $clientes = $this->clienteModel->obtenerTodos();
 
         $data = [
@@ -43,12 +30,11 @@ class ClientesController extends Controller
         $this->renderWithLayout('clientes/index', $data);
     }
 
-    /**
-     * Formulario para crear un nuevo cliente.
-     * GET /clientes/crear
-     */
     public function crear(): void
     {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
         $data = [
             'title'       => 'Nuevo Cliente',
             'pageTitle'   => 'Registrar Cliente',
@@ -61,12 +47,11 @@ class ClientesController extends Controller
         $this->renderWithLayout('clientes/form', $data);
     }
 
-    /**
-     * Guarda un nuevo cliente en la BD.
-     * POST /clientes/guardar
-     */
     public function guardar(): void
     {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
         if (!$this->isPost()) {
             $this->redirect('clientes');
         }
@@ -75,7 +60,6 @@ class ClientesController extends Controller
         $telefono  = trim($this->getPost('telefono', ''));
         $rntDni    = trim($this->getPost('rnt_dni', ''));
 
-        // Validación básica
         $errores = [];
         if (empty($nombre))  $errores[] = 'El nombre es obligatorio.';
         if (empty($rntDni))  $errores[] = 'El RTN/DNI es obligatorio.';
@@ -85,19 +69,18 @@ class ClientesController extends Controller
             $this->redirect('clientes/crear');
         }
 
-        // Llamar al SP: sp_insertar_cliente
         $this->clienteModel->insertar($nombre, $telefono, $rntDni);
 
+        $this->audit("Creó el cliente: {$nombre}");
         $_SESSION['mensaje'] = 'Cliente registrado exitosamente.';
         $this->redirect('clientes');
     }
 
-    /**
-     * Formulario para editar un cliente existente.
-     * GET /clientes/editar/{id}
-     */
     public function editar(int $id): void
     {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {
@@ -117,12 +100,11 @@ class ClientesController extends Controller
         $this->renderWithLayout('clientes/form', $data);
     }
 
-    /**
-     * Actualiza los datos de un cliente.
-     * POST /clientes/actualizar/{id}
-     */
     public function actualizar(int $id): void
     {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
         if (!$this->isPost()) {
             $this->redirect('clientes');
         }
@@ -133,24 +115,26 @@ class ClientesController extends Controller
 
         $this->clienteModel->actualizar($id, $nombre, $telefono, $rntDni);
 
+        $this->audit("Actualizó el cliente ID {$id}: {$nombre}");
         $_SESSION['mensaje'] = 'Cliente actualizado exitosamente.';
         $this->redirect('clientes');
     }
 
-    /**
-     * Elimina (desactiva) un cliente.
-     * GET /clientes/eliminar/{id}
-     */
     public function eliminar(int $id): void
     {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
+        $cliente = $this->clienteModel->obtenerPorId($id);
+        $nombreCliente = $cliente['nombre'] ?? "ID {$id}";
+
         $this->clienteModel->eliminar($id);
+
+        $this->audit("Desactivó el cliente: {$nombreCliente}");
         $_SESSION['mensaje'] = 'Cliente desactivado exitosamente.';
         $this->redirect('clientes');
     }
 
-    /**
-     * Muestra una página de error.
-     */
     private function showError(int $code, string $message): void
     {
         http_response_code($code);

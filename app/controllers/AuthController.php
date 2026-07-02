@@ -94,13 +94,8 @@ class AuthController extends Controller
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['usuario_rol']    = $usuario['rol'];
 
-        // Registrar log del acceso (SP: sp_registrar_log)
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        $this->usuarioModel->registrarLog(
-            $usuario['id_usuario'],
-            'Inicio de sesión',
-            $ip
-        );
+        // Registrar log del acceso usando AuditHelper
+        $this->audit('Inicio de sesión');
 
         $this->redirect('dashboard');
     }
@@ -110,7 +105,8 @@ class AuthController extends Controller
      */
     public function logout(): void
     {
-        $usuarioId = $_SESSION['usuario_id'] ?? null;
+        // Registrar log antes de destruir la sesión
+        $this->audit('Cierre de sesión');
 
         // Limpiar sesión
         $_SESSION = [];
