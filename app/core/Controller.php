@@ -4,11 +4,18 @@
 // ============================================================
 // Todos los controladores del sistema DEBEN extender esta
 // clase. Proporciona métodos utilitarios comunes como:
-//   - render()      -> Cargar una vista con datos.
-//   - redirect()    -> Redirigir a otra URL.
-//   - jsonResponse()-> Devolver JSON (para peticiones AJAX).
-//   - isPost()      -> Verificar si la petición es POST.
+//   - render()            -> Cargar una vista con datos.
+//   - redirect()          -> Redirigir a otra URL.
+//   - jsonResponse()      -> Devolver JSON (para peticiones AJAX).
+//   - isPost()            -> Verificar si la petición es POST.
+//   - requireAccess()     -> Validar permiso de acceso a módulo.
+//   - requireWriteAccess()-> Validar permiso de escritura.
+//   - requireAuth()       -> Validar sesión activa.
+//   - audit()             -> Registrar evento en logs_sistema.
 // ============================================================
+
+use app\helpers\AccessHelper;
+use app\helpers\AuditHelper;
 
 /**
  * Clase base para todos los Controladores de la aplicación.
@@ -112,5 +119,69 @@ class Controller
     protected function getGet(string $key, mixed $default = null): mixed
     {
         return $_GET[$key] ?? $default;
+    }
+
+    // ==========================================================
+    // MÉTODOS DE SEGURIDAD Y AUDITORÍA
+    // ==========================================================
+
+    /**
+     * Verifica que el usuario tenga sesión activa.
+     * Si no, redirige al login.
+     */
+    protected function requireAuth(): void
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            $this->redirect('auth/login');
+        }
+    }
+
+    /**
+     * Verifica que el rol del usuario tenga acceso al módulo.
+     * Si no, redirige al dashboard con mensaje de error.
+     *
+     * @param string $module Nombre del módulo (ej: "clientes", "usuarios").
+     */
+    protected function requireAccess(string $module): void
+    {
+        $this->requireAuth();
+        AccessHelper::requireAccess($module);
+    }
+
+    /**
+     * Verifica que el rol del usuario tenga permiso de escritura
+     * en el módulo (crear, editar, eliminar).
+     *
+     * @param string $module Nombre del módulo.
+     */
+    protected function requireWriteAccess(string $module): void
+    {
+        $this->requireAuth();
+        AccessHelper::requireWriteAccess($module);
+    }
+
+    /**
+     * Verifica si el usuario tiene acceso de lectura al módulo.
+     *
+     * @param string $module Nombre del módulo.
+     * @return bool
+     */
+    protected function checkAccess(string $module): bool
+    {
+        if (!isset($_SESSION['usuario_id'])) {
+            return false;
+        }
+        return AccessHelper::hasAccess($module);
+    }
+
+    /**
+     * Registra un evento en la tabla logs_sistema.
+     * Usa el usuario actual de la sesión automáticamente.
+     *
+     * @param string $accion Descripción de la acción realizada.
+     */
+    protected function audit(string $accion): void
+    {
+        AuditHelper::logCurrentUser($accion);
     }
 }

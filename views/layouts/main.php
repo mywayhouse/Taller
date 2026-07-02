@@ -25,6 +25,7 @@
             <a href="<?= APP_URL ?>/repuestos">Repuestos</a>
             <a href="<?= APP_URL ?>/facturas">Facturas</a>
             <a href="<?= APP_URL ?>/usuarios">Usuarios</a>
+            <a href="<?= APP_URL ?>/logs">Auditoría</a>
         </nav>
         <div class="topbar-user">
             <span><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Invitado') ?></span>
@@ -34,31 +35,57 @@
 
     <div class="layout-wrapper">
         <!-- ============================================================
-             MENÚ LATERAL
+             MENÚ LATERAL (filtrado por rol)
              ============================================================ -->
         <aside class="sidebar">
             <ul>
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])): ?>
                 <li class="<?= $currentPage === 'dashboard' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/dashboard">Dashboard</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])): ?>
                 <li class="<?= $currentPage === 'clientes' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/clientes">Clientes</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])): ?>
                 <li class="<?= $currentPage === 'vehiculos' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/vehiculos">Vehículos</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])): ?>
                 <li class="<?= $currentPage === 'ordenes' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/ordenes">Órdenes de Servicio</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])): ?>
                 <li class="<?= $currentPage === 'repuestos' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/repuestos">Repuestos</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA'])): ?>
                 <li class="<?= $currentPage === 'facturas' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/facturas">Facturación</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR'])): ?>
                 <li class="<?= $currentPage === 'usuarios' ? 'active' : '' ?>">
                     <a href="<?= APP_URL ?>/usuarios">Usuarios</a>
                 </li>
+                <?php endif; ?>
+
+                <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR'])): ?>
+                <li class="<?= $currentPage === 'logs' ? 'active' : '' ?>">
+                    <a href="<?= APP_URL ?>/logs">Auditoría</a>
+                </li>
+                <?php endif; ?>
             </ul>
         </aside>
 
@@ -71,6 +98,13 @@
                 <div class="alert alert-success">
                     <?= htmlspecialchars($_SESSION['mensaje']) ?>
                     <?php unset($_SESSION['mensaje']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-error">
+                    <?= htmlspecialchars($_SESSION['error']) ?>
+                    <?php unset($_SESSION['error']); ?>
                 </div>
             <?php endif; ?>
 
