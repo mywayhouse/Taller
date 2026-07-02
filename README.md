@@ -4,13 +4,14 @@
 - `main`: código estable, protegido, listo para entrega.
 - `feature/*`: una rama por módulo del sistema.
 
-Ramas activas:
-- feature/clientes-vehiculos
-- feature/inventario-repuestos
-- feature/ordenes-servicio
-- feature/facturacion
-- feature/estadisticas-dashboard
-
+Ramas activas:Parte 1
+- feature/backend-login (Kevin)
+- feature/roles-auditoria (Erwin)
+- feature/idiomas-dialogos (Dixy)
+- feature/clientes (Erick)
+- feature/vehiculos (Ricardo)
+- feature/repuestos-inventario (Evelyn)
+- 
 Reglas:
 1. Nunca trabajar directo en `main`.
 2. Cada programador trabaja en su rama `feature/*` correspondiente.
