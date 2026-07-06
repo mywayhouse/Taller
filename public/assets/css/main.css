@@ -128,6 +128,8 @@ a:hover { text-decoration: underline; }
 .btn-edit:hover { background: #d97706; }
 .btn-delete { background: #ef4444; color: #fff; }
 .btn-delete:hover { background: #dc2626; }
+.btn-reactivate {background: #28a745; color: #fff;}
+.btn-reactivate:hover {background-color: #218838;}
 
 .btn-block { width: 100%; }
 

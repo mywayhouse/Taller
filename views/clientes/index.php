@@ -42,11 +42,20 @@
                             <a href="<?= APP_URL ?>/clientes/editar/<?= $cliente['id_cliente'] ?>" class="btn btn-sm btn-edit">
                                 Editar
                             </a>
-                            <a href="<?= APP_URL ?>/clientes/eliminar/<?= $cliente['id_cliente'] ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Desactivar este cliente?')">
-                                Eliminar
-                            </a>
+                            <?php if ($cliente['estado_activo'] == 1): ?>
+                                <a href="<?= APP_URL ?>/clientes/eliminar/<?= $cliente['id_cliente'] ?>" 
+                                    class="btn btn-sm btn-delete" 
+                                    onclick="return confirm('¿Desactivar este cliente?')">
+                                    Eliminar
+                                </a>
+                            <?php else: ?>
+                                <a href="<?= APP_URL ?>/clientes/reactivar/<?= $cliente['id_cliente'] ?>" 
+                                    class="btn btn-sm btn-reactivate"
+                                    onclick="return confirm('¿Reactivar este cliente?')">
+                                    Reactivar
+                                </a>
+                            <?php endif; ?>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -97,4 +97,19 @@ class Cliente extends Model
             ':id_cliente' => $id,
         ]);
     }
+
+    public function reactivar(int $id): int
+    {
+        return $this->callNonQuery('sp_reactivar_cliente', [
+            ':p_id_cliente' => $id,
+        ]);
+    }
+
+    public function contarActivos(): int
+    {
+        $result = $this->callProcedure('sp_contar_clientes_activos');
+        
+        $fila = reset($result[0]); 
+        return (int) ($fila ?? 0);
+    }
 }

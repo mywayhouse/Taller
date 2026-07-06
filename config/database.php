@@ -95,18 +95,26 @@ class Database
     public static function executeProcedure(string $procedure, array $params = []): array
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
 
+        // Evalúa si el arreglo de parámetros trae datos.
+        // Si trae datos, extrae las llaves y arma el string "(:param1, :param2)".
+        // Si viene vacío, simplemente asigna "()".
+        $placeholders = empty($params) ? '()' : '(' . implode(', ', array_keys($params)) . ')';
+        
+        // Prepara la consulta concatenando el procedimiento y los paréntesis dinámicos
+        $stmt = $pdo->prepare("CALL {$procedure}{$placeholders}");
+
+        // Recorre el arreglo y enlaza de forma segura cada valor con su respectivo parámetro
         foreach ($params as $key => &$value) {
             $stmt->bindParam($key, $value);
         }
 
+        // Ejecuta la consulta en la base de datos
         $stmt->execute();
 
-        // Si el SP devuelve filas, las capturamos.
-        // Algunos SP pueden no devolver resultados (INSERT/UPDATE).
         $results = [];
         try {
+            // Captura todas las filas retornadas por el SELECT
             $results = $stmt->fetchAll();
         } catch (PDOException $e) {
             // El SP no devolvió resultados (no es un error)
@@ -128,14 +136,23 @@ class Database
     public static function executeNonQuery(string $procedure, array $params = []): int
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
 
+        // Construcción dinámica de los paréntesis para la llamada
+        $placeholders = empty($params) ? '()' : '(' . implode(', ', array_keys($params)) . ')';
+        
+        // Prepara la llamada evitando inyecciones de código
+        $stmt = $pdo->prepare("CALL {$procedure}{$placeholders}");
+
+        // Vincula los parámetros reales a los placeholders de la consulta
         foreach ($params as $key => &$value) {
             $stmt->bindParam($key, $value);
         }
 
         $stmt->execute();
+
+        // Cuenta cuántos registros fueron afectados (creados, actualizados o borrados lógicamente)
         $affected = $stmt->rowCount();
+        
         $stmt->closeCursor();
 
         return $affected;

@@ -8,7 +8,9 @@
     </div>
     <div class="stat-card">
         <h3>Clientes Registrados</h3>
-        <p class="stat-number">0</p>
+        <p class="stat-number">
+        <?= isset($totalClientesActivos) ? $totalClientesActivos : 'Error' ?>
+        </p>
     </div>
     <div class="stat-card">
         <h3>Vehículos en Taller</h3>

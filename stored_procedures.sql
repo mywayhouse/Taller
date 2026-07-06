@@ -87,6 +87,24 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Reactivación de clientes
+DELIMITER //
+CREATE PROCEDURE `sp_reactivar_cliente`(IN p_id_cliente INT)
+BEGIN
+    UPDATE clientes
+    SET estado_activo = 1
+    WHERE id_cliente = p_id_cliente;
+END//
+DELIMITER ;
+
+-- Contador de clientes Activos
+DELIMITER //
+CREATE PROCEDURE `sp_contar_clientes_activos`()
+BEGIN
+    SELECT COUNT(*) AS total FROM clientes WHERE estado_activo = 1;
+END//
+DELIMITER ;
+
 -- ============================================================
 -- USUARIOS
 -- ============================================================

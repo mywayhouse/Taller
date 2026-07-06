@@ -25,11 +25,14 @@ spl_autoload_register(function (string $className): void {
     $file = ROOT . DIRECTORY_SEPARATOR
           . str_replace('\\', DIRECTORY_SEPARATOR, $className)
           . '.php';
-
+    
+    $coreFile = APP . '/core/' . $className . '.php';      
     // ------------------------------------------------------
     // 2. Incluir el archivo si existe
     // ------------------------------------------------------
     if (file_exists($file)) {
         require_once $file;
+    } elseif (file_exists($coreFile)){
+        require_once $coreFile;
     }
 });

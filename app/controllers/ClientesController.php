@@ -10,7 +10,7 @@ class ClientesController extends Controller
 
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
         $this->clienteModel = new Cliente();
     }
 
@@ -132,6 +132,21 @@ class ClientesController extends Controller
 
         $this->audit("Desactivó el cliente: {$nombreCliente}");
         $_SESSION['mensaje'] = 'Cliente desactivado exitosamente.';
+        $this->redirect('clientes');
+    }
+
+    public function reactivar(int $id): void
+    {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
+        $cliente = $this->clienteModel->obtenerPorId($id);
+        $nombreCliente = $cliente['nombre'] ?? "ID {$id}";
+
+        $this->clienteModel->reactivar($id);
+
+        $this->audit("Reactivó el cliente: {$nombreCliente}");
+        $_SESSION['mensaje'] = 'Cliente reactivado exitosamente.';
         $this->redirect('clientes');
     }
 

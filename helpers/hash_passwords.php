@@ -10,6 +10,7 @@
 //
 // REQUISITO: tener la BD configurada en config/config.php
 // ============================================================
+define('ROOT', dirname(__DIR__));
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../app/core/Autoloader.php';
