@@ -367,6 +367,23 @@ END//
 DELIMITER ;
 
 -- ============================================================
+-- LOGS / AUDITORÍA
+-- ============================================================
+
+-- Listar todos los logs del sistema
+DROP PROCEDURE IF EXISTS `sp_listar_logs`;
+DELIMITER //
+CREATE PROCEDURE `sp_listar_logs`()
+BEGIN
+    SELECT l.id_log, l.accion, l.fecha_hora, l.ip_direccion,
+           u.nombre AS usuario_nombre, u.rol AS usuario_rol
+    FROM logs_sistema l
+    INNER JOIN usuarios u ON u.id_usuario = l.id_usuario
+    ORDER BY l.fecha_hora DESC;
+END//
+DELIMITER ;
+
+-- ============================================================
 -- DASHBOARD (Estadísticas)
 -- ============================================================
 
@@ -380,65 +397,5 @@ BEGIN
         (SELECT COUNT(*) FROM clientes WHERE estado_activo = 1) AS clientes_activos,
         (SELECT COUNT(*) FROM ordenes_servicio WHERE estado IN ('RECIBIDO','EN PROCESO')) AS vehiculos_en_taller,
         (SELECT COUNT(*) FROM repuestos WHERE stock_actual <= stock_minimo AND estado_activo = 1) AS repuestos_stock_bajo;
-END//
-DELIMITER ;
-
--- ============================================================
--- IDIOMAS Y TRADUCCIONES
--- ============================================================
-
--- Listar todos los idiomas disponibles
-DROP PROCEDURE IF EXISTS `sp_listar_idiomas`;
-DELIMITER //
-CREATE PROCEDURE `sp_listar_idiomas`()
-BEGIN
-    SELECT id_idioma, codigo, nombre, defecto
-    FROM idiomas
-    ORDER BY defecto DESC, nombre ASC;
-END//
-DELIMITER ;
-
--- Obtener todas las traducciones para un idioma dado
-DROP PROCEDURE IF EXISTS `sp_obtener_traducciones`;
-DELIMITER //
-CREATE PROCEDURE `sp_obtener_traducciones`(
-    IN p_codigo_idioma VARCHAR(5)
-)
-BEGIN
-    SELECT t.clave_etiqueta, t.texto
-    FROM traducciones t
-    INNER JOIN idiomas i ON i.id_idioma = t.id_idioma
-    WHERE i.codigo = p_codigo_idioma;
-END//
-DELIMITER ;
-
--- ============================================================
--- LOGS
--- ============================================================
-
--- Registrar un evento en la bitácora
-DROP PROCEDURE IF EXISTS `sp_registrar_log`;
-DELIMITER //
-CREATE PROCEDURE `sp_registrar_log`(
-    IN p_id_usuario INT,
-    IN p_accion VARCHAR(255),
-    IN p_ip_direccion VARCHAR(45)
-)
-BEGIN
-    INSERT INTO logs_sistema (id_usuario, accion, fecha_hora, ip_direccion)
-    VALUES (p_id_usuario, p_accion, NOW(), p_ip_direccion);
-END//
-DELIMITER ;
-
--- Listar todos los logs del sistema con datos del usuario
-DROP PROCEDURE IF EXISTS `sp_listar_logs`;
-DELIMITER //
-CREATE PROCEDURE `sp_listar_logs`()
-BEGIN
-    SELECT l.id_log, l.accion, l.fecha_hora, l.ip_direccion,
-           u.nombre AS usuario_nombre, u.rol AS usuario_rol
-    FROM logs_sistema l
-    INNER JOIN usuarios u ON u.id_usuario = l.id_usuario
-    ORDER BY l.fecha_hora DESC;
 END//
 DELIMITER ;

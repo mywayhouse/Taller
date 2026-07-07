@@ -10,7 +10,7 @@
 // REQUISITO: Trabajar exclusivamente con Stored Procedures.
 // ============================================================
 
-namespace Config;
+namespace config;
 
 use PDO;
 use PDOException;
@@ -118,15 +118,10 @@ class Database
     public static function executeProcedure(string $procedure, array $params = []): array
     {
         $pdo = self::getConnection();
-        $sql = self::buildCallSql($procedure, $params);
+        $placeholders = !empty($params) ? implode(',', array_fill(0, count($params), '?')) : '';
+        $sql = !empty($placeholders) ? "CALL {$procedure}({$placeholders})" : "CALL {$procedure}";
         $stmt = $pdo->prepare($sql);
-
-        foreach ($params as $key => &$value) {
-            $stmt->bindParam($key, $value);
-        }
-
-        $stmt->execute();
-
+        $stmt->execute(array_values($params));
         // Si el SP devuelve filas, las capturamos.
         // Algunos SP pueden no devolver resultados (INSERT/UPDATE).
         $results = [];
@@ -152,14 +147,12 @@ class Database
     public static function executeNonQuery(string $procedure, array $params = []): int
     {
         $pdo = self::getConnection();
-        $sql = self::buildCallSql($procedure, $params);
+        $placeholders = !empty($params) ? implode(',', array_fill(0, count($params), '?')) : '';
+        $sql = !empty($placeholders) ? "CALL {$procedure}({$placeholders})" : "CALL {$procedure}";
+
         $stmt = $pdo->prepare($sql);
+        $stmt->execute(array_values($params));
 
-        foreach ($params as $key => &$value) {
-            $stmt->bindParam($key, $value);
-        }
-
-        $stmt->execute();
         $affected = $stmt->rowCount();
         $stmt->closeCursor();
 

@@ -6,10 +6,10 @@
 // de logs de acceso mediante el SP sp_registrar_log.
 // ============================================================
 
-namespace App\controllers;
+namespace app\controllers;
 
-use Controller;
-use App\models\Usuario;
+use app\core\Controller;
+use app\models\Usuario;
 
 class AuthController extends Controller
 {
@@ -64,18 +64,20 @@ class AuthController extends Controller
         // Buscar usuario por correo (SP: sp_obtener_usuario_por_correo)
         $usuario = $this->usuarioModel->obtenerPorCorreo($correo);
 
-        if (!$usuario) {
-            $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
-            $_SESSION['old_correo'] = $correo;
-            $this->redirect('auth/login');
-        }
-
         // --------------------------------------------------
-        // Verificar contraseña con bcrypt
+        // Verificar contraseña
         // --------------------------------------------------
-        $passwordValida = password_verify($password, $usuario['contrasenia']);
+        // Las contraseñas en Base_taller.sql están en texto
+        // plano. Se compara directamente. En producción,
+        // deben almacenarse con password_hash(bcrypt) y
+        // usar password_verify(). Ejecute el script
+        // helpers/hash_passwords.php para migrar.
+        // --------------------------------------------------
+        $hash = $usuario['contrasenia'];
+        $passwordValida = password_verify($password, $hash)
+                       || ($password === $hash); // fallback texto plano
 
-        if (!$passwordValida) {
+        if (!$usuario || !$passwordValida) {
             $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
             $_SESSION['old_correo'] = $correo;
             $this->redirect('auth/login');

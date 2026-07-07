@@ -5,7 +5,7 @@
 // Formateo consistente de fechas y horas en toda la app.
 // ============================================================
 
-namespace App\helpers;
+namespace app\helpers;
 
 class DateHelper
 {

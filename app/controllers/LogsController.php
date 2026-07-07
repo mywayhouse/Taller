@@ -1,8 +1,8 @@
 <?php
-namespace App\controllers;
+namespace app\controllers;
 
-use Controller;
-use App\helpers\AuditHelper;
+use app\core\Controller;
+use app\helpers\AuditHelper;
 
 class LogsController extends Controller
 {

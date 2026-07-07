@@ -11,9 +11,9 @@
 // escritas directamente en PHP.
 // ============================================================
 
-namespace App\core;
+namespace app\core;
 
-use Config\Database;
+use config\Database;
 use PDO;
 
 /**

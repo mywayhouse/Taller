@@ -6,7 +6,7 @@
 // y protección contra vulnerabilidades web comunes.
 // ============================================================
 
-namespace App\helpers;
+namespace app\helpers;
 
 class SecurityHelper
 {

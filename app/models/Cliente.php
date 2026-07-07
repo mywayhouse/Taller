@@ -2,46 +2,25 @@
 // ============================================================
 // Cliente.php — Modelo de Clientes
 // ============================================================
-// Capa de acceso a datos para la tabla "clientes".
-// Todas las operaciones se delegan a Stored Procedures.
-//
-// SP esperados en la BD:
-//   sp_listar_clientes()
-//   sp_obtener_cliente_por_id(:id_cliente)
-//   sp_insertar_cliente(:nombre, :telefono, :rnt_dni)
-//   sp_actualizar_cliente(:id_cliente, :nombre, :telefono, :rnt_dni)
-//   sp_eliminar_cliente(:id_cliente)
-// ============================================================
+namespace app\models;
 
-namespace App\models;
-
-use App\core\Model;
+use app\core\Model;
 
 class Cliente extends Model
 {
-    /**
-     * Obtiene todos los clientes activos.
-     * Llama al SP: sp_listar_clientes()
-     *
-     * @return array Lista de clientes.
-     */
     public function obtenerTodos(): array
     {
         return $this->callProcedure('sp_listar_clientes');
     }
 
-    /**
-     * Obtiene un cliente por su ID.
-     * Llama al SP: sp_obtener_cliente_por_id(:id_cliente)
-     *
-     * @param int $id ID del cliente.
-     * @return array|null Datos del cliente o null si no existe.
-     */
     public function obtenerPorId(int $id): ?array
     {
         $result = $this->callProcedure('sp_obtener_cliente_por_id', [
             ':id_cliente' => $id,
         ]);
+        return $result[0] ?? null;
+    }
+
 
         return $result[0] ?? null;
     }
@@ -97,4 +76,15 @@ class Cliente extends Model
             ':id_cliente' => $id,
         ]);
     }
+
+    /**
+     * Busca clientes por RTN o Nombre usando Stored Procedures.
+     */
+    public function buscarPorRtnONombre(string $term): array
+    {
+        return $this->callProcedure('sp_buscar_cliente_por_rtn_o_nombre', [
+            ':p_term' => $term
+        ]);
+    }
+}
 }

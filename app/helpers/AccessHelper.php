@@ -1,5 +1,5 @@
 <?php
-namespace App\helpers;
+namespace app\helpers;
 
 class AccessHelper
 {

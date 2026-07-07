@@ -1,4 +1,5 @@
 <?php
+namespace app\core;
 // ============================================================
 // Controller.php — Controlador Base
 // ============================================================
@@ -14,27 +15,13 @@
 //   - audit()             -> Registrar evento en logs_sistema.
 // ============================================================
 
-use App\helpers\AccessHelper;
-use App\helpers\AuditHelper;
-use App\helpers\LanguageHelper;
-
+use app\helpers\AccessHelper;
+use app\helpers\AuditHelper;
 /**
  * Clase base para todos los Controladores de la aplicación.
  */
 class Controller
 {
-    /**
-     * Traduce una clave de etiqueta al idioma actual.
-     *
-     * @param string $clave   Clave de la etiqueta (ej: "welcome_msg").
-     * @param string $default Texto por defecto si no se encuentra la clave.
-     * @return string
-     */
-    protected function __(string $clave, string $default = ''): string
-    {
-        return LanguageHelper::translate($clave, $default);
-    }
-
     /**
      * Renderiza una vista y le pasa variables.
      *

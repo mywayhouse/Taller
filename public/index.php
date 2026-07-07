@@ -33,6 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // ----------------------------------------------------------
+// 4. CONSTANTES DE RUTAS DEL SISTEMA
 // 4. AUTOLOADER DE COMPOSER (PSR-4)
 // ----------------------------------------------------------
 // Carga automática de todas las clases del proyecto usando
@@ -51,20 +52,25 @@ require_once __DIR__ . '/../vendor/autoload.php';
 define('ROOT', dirname(__DIR__));                    // C:/.../taller_mecanico/
 define('APP', ROOT . '/app');                        // app/
 define('CONFIG', ROOT . '/config');                  // config/
-define('VIEWS', ROOT . '/views');                    // views/
-define('PUBLIC_URL', '/TallerMecanico/public');      // URL base para assets
+define('VIEWS', ROOT . '/views');                // views/
+define('PUBLIC_URL', '/Taller/public');      // URL base para assets
 
 // ----------------------------------------------------------
-// 6. CARGA DE CONFIGURACIÓN GLOBAL
+// 5. CARGA DE ARCHIVOS ESENCIALES
 // ----------------------------------------------------------
+// Se requiere el Autoloader (PSR-4 style manual) y el archivo
+// global de configuraciones (base de datos, constantes, etc.).
 require_once CONFIG . '/config.php';
-
+require_once APP . '/core/Autoloader.php';
+require_once APP . '/core/Controller.php';
 // ----------------------------------------------------------
-// 7. INICIO DEL ROUTER (Despachador de peticiones)
+// 6. INICIO DEL ROUTER (Despachador de peticiones)
 // ----------------------------------------------------------
 // Se captura el parámetro "url" que viene del .htaccess
 // (rewrite), se sanitiza y se envía al Router para que
 // determine qué Controlador y Método ejecutar.
+use app\core\Router;
+
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $router = new Router();
 $router->dispatch(trim($url, '/'));
