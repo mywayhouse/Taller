@@ -1,4 +1,5 @@
 <?php
+namespace app\core;
 // ============================================================
 // Controller.php — Controlador Base
 // ============================================================
@@ -16,7 +17,6 @@
 
 use app\helpers\AccessHelper;
 use app\helpers\AuditHelper;
-
 /**
  * Clase base para todos los Controladores de la aplicación.
  */

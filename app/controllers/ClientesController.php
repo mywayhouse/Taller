@@ -1,7 +1,7 @@
 <?php
 namespace app\controllers;
 
-use Controller;
+use app\core\Controller;
 use app\models\Cliente;
 
 class ClientesController extends Controller

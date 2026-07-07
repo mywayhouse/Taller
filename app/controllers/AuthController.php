@@ -8,7 +8,7 @@
 
 namespace app\controllers;
 
-use Controller;
+use app\core\Controller;
 use app\models\Usuario;
 
 class AuthController extends Controller

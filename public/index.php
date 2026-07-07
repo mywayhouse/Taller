@@ -40,8 +40,8 @@ if (session_status() === PHP_SESSION_NONE) {
 define('ROOT', dirname(__DIR__));                    // C:/.../taller_mecanico/
 define('APP', ROOT . '/app');                        // app/
 define('CONFIG', ROOT . '/config');                  // config/
-define('VIEWS', ROOT . '/views');                    // views/
-define('PUBLIC_URL', '/TallerMecanico/public');      // URL base para assets
+define('VIEWS', ROOT . '/views');                // views/
+define('PUBLIC_URL', '/Taller/public');      // URL base para assets
 
 // ----------------------------------------------------------
 // 5. CARGA DE ARCHIVOS ESENCIALES
@@ -50,13 +50,15 @@ define('PUBLIC_URL', '/TallerMecanico/public');      // URL base para assets
 // global de configuraciones (base de datos, constantes, etc.).
 require_once CONFIG . '/config.php';
 require_once APP . '/core/Autoloader.php';
-
+require_once APP . '/core/Controller.php';
 // ----------------------------------------------------------
 // 6. INICIO DEL ROUTER (Despachador de peticiones)
 // ----------------------------------------------------------
 // Se captura el parámetro "url" que viene del .htaccess
 // (rewrite), se sanitiza y se envía al Router para que
 // determine qué Controlador y Método ejecutar.
+use app\core\Router;
+
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $router = new Router();
 $router->dispatch(trim($url, '/'));

@@ -95,14 +95,10 @@ class Database
     public static function executeProcedure(string $procedure, array $params = []): array
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
-
-        foreach ($params as $key => &$value) {
-            $stmt->bindParam($key, $value);
-        }
-
-        $stmt->execute();
-
+        $placeholders = !empty($params) ? implode(',', array_fill(0, count($params), '?')) : '';
+        $sql = !empty($placeholders) ? "CALL {$procedure}({$placeholders})" : "CALL {$procedure}";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array_values($params));
         // Si el SP devuelve filas, las capturamos.
         // Algunos SP pueden no devolver resultados (INSERT/UPDATE).
         $results = [];
@@ -128,13 +124,12 @@ class Database
     public static function executeNonQuery(string $procedure, array $params = []): int
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
+        $placeholders = !empty($params) ? implode(',', array_fill(0, count($params), '?')) : '';
+        $sql = !empty($placeholders) ? "CALL {$procedure}({$placeholders})" : "CALL {$procedure}";
 
-        foreach ($params as $key => &$value) {
-            $stmt->bindParam($key, $value);
-        }
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(array_values($params));
 
-        $stmt->execute();
         $affected = $stmt->rowCount();
         $stmt->closeCursor();
 
