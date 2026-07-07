@@ -10,9 +10,9 @@
 //   sp_registrar_log(:id_usuario, :accion, :ip_direccion)
 // ============================================================
 
-namespace app\models;
+namespace App\models;
 
-use app\core\Model;
+use App\core\Model;
 
 class Usuario extends Model
 {

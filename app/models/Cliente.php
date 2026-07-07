@@ -13,9 +13,9 @@
 //   sp_eliminar_cliente(:id_cliente)
 // ============================================================
 
-namespace app\models;
+namespace App\models;
 
-use app\core\Model;
+use App\core\Model;
 
 class Cliente extends Model
 {

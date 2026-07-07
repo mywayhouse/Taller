@@ -33,7 +33,18 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // ----------------------------------------------------------
-// 4. CONSTANTES DE RUTAS DEL SISTEMA
+// 4. AUTOLOADER DE COMPOSER (PSR-4)
+// ----------------------------------------------------------
+// Carga automática de todas las clases del proyecto usando
+// el estándar PSR-4. Mapea:
+//   "App\"     -> app/
+//   "Config\"  -> config/
+// Elimina la necesidad de require_once manuales.
+// ----------------------------------------------------------
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// ----------------------------------------------------------
+// 5. CONSTANTES DE RUTAS DEL SISTEMA
 // ----------------------------------------------------------
 // Facilita la inclusión de archivos desde cualquier parte
 // del código usando rutas absolutas dinámicas.
@@ -44,15 +55,12 @@ define('VIEWS', ROOT . '/views');                    // views/
 define('PUBLIC_URL', '/TallerMecanico/public');      // URL base para assets
 
 // ----------------------------------------------------------
-// 5. CARGA DE ARCHIVOS ESENCIALES
+// 6. CARGA DE CONFIGURACIÓN GLOBAL
 // ----------------------------------------------------------
-// Se requiere el Autoloader (PSR-4 style manual) y el archivo
-// global de configuraciones (base de datos, constantes, etc.).
 require_once CONFIG . '/config.php';
-require_once APP . '/core/Autoloader.php';
 
 // ----------------------------------------------------------
-// 6. INICIO DEL ROUTER (Despachador de peticiones)
+// 7. INICIO DEL ROUTER (Despachador de peticiones)
 // ----------------------------------------------------------
 // Se captura el parámetro "url" que viene del .htaccess
 // (rewrite), se sanitiza y se envía al Router para que

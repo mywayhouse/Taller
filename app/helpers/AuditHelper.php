@@ -1,7 +1,7 @@
 <?php
-namespace app\helpers;
+namespace App\helpers;
 
-use config\Database;
+use Config\Database;
 
 class AuditHelper
 {

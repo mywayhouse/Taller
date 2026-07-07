@@ -10,7 +10,7 @@
 // REQUISITO: Trabajar exclusivamente con Stored Procedures.
 // ============================================================
 
-namespace config;
+namespace Config;
 
 use PDO;
 use PDOException;
@@ -33,6 +33,29 @@ class Database
     // Clonación privada: evita clonar la instancia.
     // ----------------------------------------------------------
     private function __clone() {}
+
+    /**
+     * Construye el SQL para CALL incluyendo placeholders de parámetros.
+     *
+     * @param string $procedure Nombre del SP
+     * @param array  $params    Parámetros asociativos [:param => valor]
+     * @return string           Ej: "CALL sp_name(:p1, :p2)" o "CALL sp_name"
+     */
+    private static function buildCallSql(string $procedure, array $params): string
+    {
+        if (empty($params)) {
+            return "CALL $procedure";
+        }
+
+        $keys = array_keys($params);
+        // Usar el nombre del parámetro como placeholder (ej: :p_id)
+        // Si la clave es numérica, usar ? como placeholder posicional
+        $placeholders = array_map(function ($key) {
+            return is_string($key) ? $key : '?';
+        }, $keys);
+
+        return "CALL $procedure(" . implode(', ', $placeholders) . ")";
+    }
 
     /**
      * Obtiene la conexión PDO (la crea si no existe).
@@ -95,7 +118,8 @@ class Database
     public static function executeProcedure(string $procedure, array $params = []): array
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
+        $sql = self::buildCallSql($procedure, $params);
+        $stmt = $pdo->prepare($sql);
 
         foreach ($params as $key => &$value) {
             $stmt->bindParam($key, $value);
@@ -128,7 +152,8 @@ class Database
     public static function executeNonQuery(string $procedure, array $params = []): int
     {
         $pdo = self::getConnection();
-        $stmt = $pdo->prepare("CALL $procedure");
+        $sql = self::buildCallSql($procedure, $params);
+        $stmt = $pdo->prepare($sql);
 
         foreach ($params as $key => &$value) {
             $stmt->bindParam($key, $value);

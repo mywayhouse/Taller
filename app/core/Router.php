@@ -77,15 +77,13 @@ class Router
         // --------------------------------------------------
         // 5. Verificar que el controlador existe
         // --------------------------------------------------
-        $controllerClass = "app\\controllers\\{$controllerName}";
+        $controllerClass = "App\\controllers\\{$controllerName}";
         $controllerFile = APP . "/controllers/{$controllerName}.php";
 
         if (!file_exists($controllerFile)) {
             $this->showError(404, "Controlador '{$controllerName}' no encontrado.");
             return;
         }
-
-        require_once $controllerFile;
 
         if (!class_exists($controllerClass)) {
             $this->showError(500, "Clase '{$controllerClass}' no definida en el archivo.");

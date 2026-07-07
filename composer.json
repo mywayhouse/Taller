@@ -1,0 +1,41 @@
+{
+    "name": "taller/mecanico",
+    "description": "Sistema de Gestión - Taller Mecánico (MVC + Firebase)",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Equipo de Desarrollo",
+            "email": "dev@taller.local"
+        }
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Config\\": "config/"
+        },
+        "files": [
+            "app/helpers/functions.php"
+        ]
+    },
+
+    "require": {
+        "php": ">=8.0",
+        "kreait/firebase-php": "^7.12"
+    },
+
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+
+    "scripts": {
+        "post-install-cmd": [
+            "echo 'Dependencias instaladas correctamente. El autoloader PSR-4 ya está listo.'"
+        ],
+        "post-update-cmd": [
+            "echo 'Dependencias actualizadas correctamente.'"
+        ]
+    }
+}

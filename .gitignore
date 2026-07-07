@@ -6,6 +6,10 @@
 .env
 config/config.local.php
 
+# Firebase credentials (NO subir al repositorio)
+/storage/app/firebase-credentials.json
+!/storage/app/.gitkeep
+
 # Logs y archivos temporales
 storage/logs/*
 !storage/logs/.gitkeep
