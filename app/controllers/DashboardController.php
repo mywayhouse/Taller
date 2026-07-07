@@ -1,12 +1,13 @@
 <?php
 namespace App\controllers;
 
-use Controller;
+use App\core\Controller;
 
 class DashboardController extends Controller
 {
     public function index(): void
     {
+        
         $this->requireAccess('dashboard');
 
         $data = [

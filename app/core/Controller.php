@@ -13,7 +13,7 @@
 //   - requireAuth()       -> Validar sesión activa.
 //   - audit()             -> Registrar evento en logs_sistema.
 // ============================================================
-
+namespace App\core;
 use App\helpers\AccessHelper;
 use App\helpers\AuditHelper;
 use App\helpers\LanguageHelper;

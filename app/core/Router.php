@@ -11,7 +11,7 @@
 // Si no se especifica controlador, carga el controlador
 // por defecto (DashboardController).
 // ============================================================
-
+namespace App\core;
 /**
  * Router — Despachador de peticiones HTTP
  */

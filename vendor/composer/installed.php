@@ -3,7 +3,7 @@
         'name' => 'taller/mecanico',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f7b64dbadbee0bc4fbe0415f5e4295dfcd9264d3',
+        'reference' => 'cb5c5a49cedffb6fe7a38531de5d1d655f6b26c0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -388,7 +388,7 @@
         'taller/mecanico' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f7b64dbadbee0bc4fbe0415f5e4295dfcd9264d3',
+            'reference' => 'cb5c5a49cedffb6fe7a38531de5d1d655f6b26c0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

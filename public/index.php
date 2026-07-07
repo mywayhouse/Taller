@@ -52,7 +52,7 @@ define('ROOT', dirname(__DIR__));                    // C:/.../taller_mecanico/
 define('APP', ROOT . '/app');                        // app/
 define('CONFIG', ROOT . '/config');                  // config/
 define('VIEWS', ROOT . '/views');                    // views/
-define('PUBLIC_URL', '/TallerMecanico/public');      // URL base para assets
+define('PUBLIC_URL', '/Taller/public');              // URL base para assets
 
 // ----------------------------------------------------------
 // 6. CARGA DE CONFIGURACIÓN GLOBAL
@@ -65,6 +65,7 @@ require_once CONFIG . '/config.php';
 // Se captura el parámetro "url" que viene del .htaccess
 // (rewrite), se sanitiza y se envía al Router para que
 // determine qué Controlador y Método ejecutar.
+use App\core\Router;
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $router = new Router();
 $router->dispatch(trim($url, '/'));

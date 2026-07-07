@@ -9,7 +9,6 @@
 //
 // REQUISITO: Trabajar exclusivamente con Stored Procedures.
 // ============================================================
-
 namespace Config;
 
 use PDO;

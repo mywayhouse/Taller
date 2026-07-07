@@ -5,10 +5,9 @@
 // Maneja el inicio y cierre de sesión, así como el registro
 // de logs de acceso mediante el SP sp_registrar_log.
 // ============================================================
-
 namespace App\controllers;
 
-use Controller;
+use App\core\Controller;
 use App\models\Usuario;
 
 class AuthController extends Controller
@@ -63,7 +62,12 @@ class AuthController extends Controller
 
         // Buscar usuario por correo (SP: sp_obtener_usuario_por_correo)
         $usuario = $this->usuarioModel->obtenerPorCorreo($correo);
-
+        /*
+echo "<pre>Datos devueltos por la BD:\n";
+var_dump($usuario);
+echo "</pre>"; 
+exit;
+*/
         if (!$usuario) {
             $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
             $_SESSION['old_correo'] = $correo;
@@ -93,7 +97,7 @@ class AuthController extends Controller
         $_SESSION['usuario_rol']    = $usuario['rol'];
 
         // Registrar log del acceso usando AuditHelper
-        $this->audit('Inicio de sesión');
+        //$this->audit('Inicio de sesión');
 
         $this->redirect('dashboard');
     }

@@ -27,7 +27,7 @@ define('DB_CHARSET', 'utf8mb4');
 // CONSTANTES DE LA APLICACIÓN
 // ----------------------------------------------------------
 define('APP_NAME', 'Sistema de Gestión - Taller Mecánico');
-define('APP_URL', 'http://localhost/TallerMecanico');
+define('APP_URL', 'http://localhost/Taller');
 define('APP_DEBUG', true);                  // Cambiar a false en producción
 
 // ----------------------------------------------------------
