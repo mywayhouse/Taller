@@ -21,6 +21,19 @@ class Cliente extends Model
         return $result[0] ?? null;
     }
 
+
+        return $result[0] ?? null;
+    }
+
+    /**
+     * Inserta un nuevo cliente.
+     * Llama al SP: sp_insertar_cliente(:nombre, :telefono, :rnt_dni)
+     *
+     * @param string $nombre   Nombre completo.
+     * @param string $telefono Teléfono (opcional).
+     * @param string $rntDni   RTN o DNI.
+     * @return int Filas afectadas.
+     */
     public function insertar(string $nombre, string $telefono, string $rntDni): int
     {
         return $this->callNonQuery('sp_insertar_cliente', [
@@ -30,6 +43,16 @@ class Cliente extends Model
         ]);
     }
 
+    /**
+     * Actualiza los datos de un cliente existente.
+     * Llama al SP: sp_actualizar_cliente(:id_cliente, :nombre, :telefono, :rnt_dni)
+     *
+     * @param int    $id       ID del cliente.
+     * @param string $nombre   Nombre actualizado.
+     * @param string $telefono Teléfono actualizado.
+     * @param string $rntDni   RTN/DNI actualizado.
+     * @return int Filas afectadas.
+     */
     public function actualizar(int $id, string $nombre, string $telefono, string $rntDni): int
     {
         return $this->callNonQuery('sp_actualizar_cliente', [
@@ -40,6 +63,13 @@ class Cliente extends Model
         ]);
     }
 
+    /**
+     * Elimina (desactiva lógicamente) un cliente.
+     * Llama al SP: sp_eliminar_cliente(:id_cliente)
+     *
+     * @param int $id ID del cliente.
+     * @return int Filas afectadas.
+     */
     public function eliminar(int $id): int
     {
         return $this->callNonQuery('sp_eliminar_cliente', [
@@ -56,4 +86,5 @@ class Cliente extends Model
             ':p_term' => $term
         ]);
     }
+}
 }

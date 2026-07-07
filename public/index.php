@@ -34,6 +34,18 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // ----------------------------------------------------------
 // 4. CONSTANTES DE RUTAS DEL SISTEMA
+// 4. AUTOLOADER DE COMPOSER (PSR-4)
+// ----------------------------------------------------------
+// Carga automática de todas las clases del proyecto usando
+// el estándar PSR-4. Mapea:
+//   "App\"     -> app/
+//   "Config\"  -> config/
+// Elimina la necesidad de require_once manuales.
+// ----------------------------------------------------------
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// ----------------------------------------------------------
+// 5. CONSTANTES DE RUTAS DEL SISTEMA
 // ----------------------------------------------------------
 // Facilita la inclusión de archivos desde cualquier parte
 // del código usando rutas absolutas dinámicas.
