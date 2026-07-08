@@ -93,7 +93,7 @@ class Database
                 // --------------------------------------------------
                 // Configurar la sesión de la conexión
                 // --------------------------------------------------
-                self::$instance->exec("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci'");
+                self::$instance->exec("SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'");
                 self::$instance->exec("SET time_zone = '-06:00'"); // UTC-6 (Honduras)
             } catch (PDOException $e) {
                 // En producción, registrar el error en un log y mostrar

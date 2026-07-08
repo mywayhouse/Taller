@@ -10,6 +10,7 @@ class ClientesController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->clienteModel = new Cliente();
     }
 

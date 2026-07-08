@@ -26,10 +26,8 @@ public/uploads/*
 # Dependencias del proyecto (si se usara Composer)
 /vendor/
 
-# MySQL personalizado (datos locales)
-storage/mysql_data/*
-
 # Sistema
 .DS_Store
 Thumbs.db
 *.log
+*.sql

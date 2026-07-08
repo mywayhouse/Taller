@@ -10,6 +10,7 @@ class VehiculosController extends Controller
 
     public function __construct()
     {
+        parent::__construct();
         $this->vehiculoModel = new Vehiculo();
     }
 
