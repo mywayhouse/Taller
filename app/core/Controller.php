@@ -23,6 +23,11 @@ use App\helpers\LanguageHelper;
  */
 class Controller
 {
+    public function __construct()
+    {
+        // Constructor base
+    }
+
     /**
      * Traduce una clave de etiqueta al idioma actual.
      *
