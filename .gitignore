@@ -23,11 +23,21 @@ storage/sessions/*
 # Uploads de usuarios
 public/uploads/*
 
-# Dependencias del proyecto (si se usara Composer)
+# Dependencias del proyecto (cada quien corre composer install)
 /vendor/
 
 # Sistema
 .DS_Store
 Thumbs.db
 *.log
-*.sql
+
+# Datos de MySQL local (no subir)
+storage/mysql_data/
+
+# No ignorar SQLs de base de datos
+!Base_taller.sql
+!stored_procedures.sql
+!procedures.sql
+
+# Instalador
+install.php

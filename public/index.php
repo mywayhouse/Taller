@@ -9,8 +9,6 @@
 // ----------------------------------------------------------
 // 1. CONFIGURACIÓN DE ERRORES (Entorno de desarrollo)
 // ----------------------------------------------------------
-// En producción cambia E_ALL a 0 para ocultar errores al usuario.
-// PHP >= 8.0 permite niveles personalizados de reporte.
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('log_errors', 1);
@@ -48,11 +46,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // ----------------------------------------------------------
 // Facilita la inclusión de archivos desde cualquier parte
 // del código usando rutas absolutas dinámicas.
-define('ROOT', dirname(__DIR__));                    // C:/.../taller_mecanico/
-define('APP', ROOT . '/app');                        // app/
-define('CONFIG', ROOT . '/config');                  // config/
-define('VIEWS', ROOT . '/views');                    // views/
-define('PUBLIC_URL', '/Taller/public');              // URL base para assets
+define('ROOT', dirname(__DIR__));
+define('APP', ROOT . '/Src');
+define('CONFIG', ROOT . '/config');
+define('VIEWS', ROOT . '/views');
+define('PUBLIC_URL', '/Taller/public');
 
 // ----------------------------------------------------------
 // 6. CARGA DE CONFIGURACIÓN GLOBAL
@@ -60,12 +58,9 @@ define('PUBLIC_URL', '/Taller/public');              // URL base para assets
 require_once CONFIG . '/config.php';
 
 // ----------------------------------------------------------
-// 7. INICIO DEL ROUTER (Despachador de peticiones)
+// 7. INICIO DEL ROUTER
 // ----------------------------------------------------------
-// Se captura el parámetro "url" que viene del .htaccess
-// (rewrite), se sanitiza y se envía al Router para que
-// determine qué Controlador y Método ejecutar.
-use App\core\Router;
+use App\Routes\Router;
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $router = new Router();
 $router->dispatch(trim($url, '/'));
