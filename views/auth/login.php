@@ -11,14 +11,15 @@
         <div class="login-card">
             <div class="login-header">
                 <h1><?= APP_NAME ?></h1>
-                <p>Ingrese sus credenciales para acceder</p>
-            </div>
-
-            <?php if (!empty($error)): ?>
+                <?php if (!empty($error)): ?>
                 <div class="alert alert-error">
                     <?= htmlspecialchars($error) ?>
                 </div>
             <?php endif; ?>
+                <p>Ingrese sus credenciales para poder acceder</p>
+            </div>
+
+
 
             <form action="<?= APP_URL ?>/auth/authenticate" method="POST" class="login-form">
                 <div class="form-group">
@@ -46,10 +47,16 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">
-                    Iniciar Sesión
+                        <span class="circle1"></span>
+                        <span class="circle2"></span>
+                        <span class="circle3"></span>
+                        <span class="circle4"></span>
+                        <span class="circle5"></span>
+                        <span class="text">Iniciar sesion</span>
                 </button>
             </form>
         </div>
     </div>
+
 </body>
 </html>

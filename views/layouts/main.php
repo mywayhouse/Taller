@@ -17,6 +17,8 @@
         <div class="topbar-brand">
             <h1><?= htmlspecialchars(APP_NAME) ?></h1>
         </div>
+
+<!--        Barra de navegacion innecesaria xd
         <nav class="topbar-nav">
             <a href="<?= APP_URL ?>/dashboard">Dashboard</a>
             <a href="<?= APP_URL ?>/clientes">Clientes</a>
@@ -27,6 +29,10 @@
             <a href="<?= APP_URL ?>/usuarios">Usuarios</a>
             <a href="<?= APP_URL ?>/logs">Auditoría</a>
         </nav>
+
+-->
+
+
         <div class="topbar-user">
             <span><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Invitado') ?></span>
             <a href="<?= APP_URL ?>/auth/logout" class="btn-logout">Cerrar Sesión</a>

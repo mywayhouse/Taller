@@ -1,13 +1,153 @@
 /* ============================================================
    login.css — Estilos específicos para la página de login
    ============================================================ */
+/*Apartado de Ricardo Matamoros para efecto visual background*/
+body, html {
+    margin: 0;
+    height: 100%;
+    font-family: sans-serif;
+}
+.login-page{
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    display: flex;
 
+    position: relative;
+
+    background: linear-gradient(107deg,rgba(19, 32, 48, 1) 0%, rgba(76, 76, 120, 1) 69%, rgba(72, 62, 122, 1) 100%);
+    z-index: 1;
+}
+.login-page::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(150deg, rgba(30, 48, 70, 1) 0%, rgba(95, 95, 150, 1) 50%, rgba(50, 40, 85, 1) 100%);
+    opacity: 0;
+    animation: smoothGradientFade 8s ease-in-out infinite;
+    z-index: -1;
+}
+@keyframes smoothGradientFade {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+
+
+
+
+.login-container { width: 100%; max-width: 400px; padding: 20px;}
+.login-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.192);
+    backdrop-filter: blur(5px);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.473);
+}
+.login-form {
+    text-align: left;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.login-card label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.9rem;
+}
+.login-card input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+.login-card input:focus {
+    border-color: #0c66ed;
+    outline: none;
+}
+.alert-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+}
+
+
+.btn {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+    background-color: #171717;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.6rem;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color 0.3s;
+    z-index: 1;
+}
+.btn span[class^="circle"] {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #480ced;
+    border-radius: 50%;
+    z-index: -1;
+    transform: scale(0);
+    transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.circle1 { top: -10px; left: 10%; }
+.circle2 { top: -10px; left: 30%; }
+.circle3 { top: -10px; left: 50%; }
+.circle4 { top: -10px; left: 70%; }
+.circle5 { top: -10px; left: 90%; }
+.btn:hover span[class^="circle"] {transform: scale(8);}
+.btn:hover .circle1 { transition-delay: 0s; }
+.btn:hover .circle2 { transition-delay: 0.05s; }
+.btn:hover .circle3 { transition-delay: 0.1s; }
+.btn:hover .circle4 { transition-delay: 0.15s; }
+.btn:hover .circle5 { transition-delay: 0.2s; }
+.btn .text {position: relative; z-index: 1;}
+
+
+
+/*fin xd*/
+
+
+/*
 .login-page {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: linear-gradient(107deg,rgba(19, 32, 48, 1) 0%, rgba(76, 76, 120, 1) 69%, rgba(72, 62, 122, 1) 100%);
 }
 
 .login-container {
@@ -17,12 +157,15 @@
 }
 
 .login-card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 8px;
     padding: 32px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: box-shadow 0.3s ease-in-out;
 }
-
+.login-card:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+}
 .login-header {
     text-align: center;
     margin-bottom: 24px;
@@ -72,3 +215,4 @@
     font-size: 14px;
     font-weight: 600;
 }
+*/
