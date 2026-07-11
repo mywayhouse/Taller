@@ -42,7 +42,7 @@ if (file_exists($envFile)) {
 // ----------------------------------------------------------
 // CONSTANTES DE LA APLICACIÓN
 // ----------------------------------------------------------
-define('APP_NAME', $_ENV['APP_NAME'] ?? 'Sistema de Taller Mecanico');
+define('APP_NAME', $_ENV['APP_NAME'] ?? 'Taller Mecanico');
 define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost/Taller');
 define('APP_DEBUG', filter_var($_ENV['APP_DEBUG'] ?? true, FILTER_VALIDATE_BOOLEAN));
 
