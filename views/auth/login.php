@@ -46,14 +46,14 @@
                     >
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
+                <center><button type="submit" class="btn btn-primary btn-block">
                         <span class="circle1"></span>
                         <span class="circle2"></span>
                         <span class="circle3"></span>
                         <span class="circle4"></span>
                         <span class="circle5"></span>
                         <span class="text">Iniciar sesion</span>
-                </button>
+                </button></center>
             </form>
         </div>
     </div>
