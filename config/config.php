@@ -9,19 +9,22 @@
 // ----------------------------------------------------------
 // ZONA HORARIA (Ajustar según ubicación del servidor)
 // ----------------------------------------------------------
-date_default_timezone_set('America/Tegucigalpa');
+date_default_timezone_set('America/Tegucigalpa');   //sin importar el lugar usara zonas horarias de honduras
 
 // Si ROOT no está definido, definirlo aquí
 if (!defined('ROOT')) {
-    define('ROOT', dirname(__DIR__));
+    define('ROOT', dirname(__DIR__));   //_DIR_ buscara la carpeta padre osea la raiz del proyecto, en este caso Taller
 }
 
 // ----------------------------------------------------------
 // CONSTANTES DE CONEXIÓN A LA BASE DE DATOS
 // ----------------------------------------------------------
 // Si existe .env, cargar desde allí; si no, usar valores por defecto
-$envFile = dirname(__DIR__) . '/.env';
+$envFile = dirname(__DIR__) . '/.env';  //aqui se guardaran contraseñas reales fuera del codigo fuente, para que no se suban a github
 if (file_exists($envFile)) {
+    //si lo encuentra utilizara Dotenv para leerlo
+    //luego define las constantes de conexion a la base de datos
+    //?? significa usar el valor de la izquierda si existe, sino usar el de la derecha osea como si no encuentras lo que pido usa el default xd
     $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
     $dotenv->load();
     define('DB_HOST', $_ENV['IP'] ?? '127.0.0.1');
@@ -31,6 +34,7 @@ if (file_exists($envFile)) {
     define('DB_PASS', $_ENV['PASSWORD'] ?? '');
     define('DB_CHARSET', 'utf8mb4');
 } else {
+    //si no lo encuentra asumira que es local
     define('DB_HOST', '127.0.0.1');
     define('DB_PORT', '3306');
     define('DB_NAME', 'taller_mecanico');
