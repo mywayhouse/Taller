@@ -8,9 +8,11 @@
 </head>
 <body class="login-page">
     <div class="login-container">
+        
         <div class="login-card">
+            <img class="login-logo" src="<?= APP_URL ?>/assets/images/logo_ico.png" alt="Logo">
             <div class="login-header">
-                <h1><?= APP_NAME ?></h1>
+                <h2>Auto & Motos</h2>
                 <?php if (!empty($error)): ?>
                 <div class="alert alert-error">
                     <?= htmlspecialchars($error) ?>

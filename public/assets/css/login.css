@@ -45,14 +45,19 @@ body, html {
 
 
 
-
-
+/*Olis xd*/
+.login-logo{
+    display: block;
+    max-width: 200px;
+    margin: 0 auto 10px auto;
+    height: auto;
+}
 
 
 .login-container { width: 100%; max-width: 400px; padding: 20px;}
 .login-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 40px;
+    background: rgb(255, 255, 255);
+    padding: 25px;
     border-radius: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.192);
     backdrop-filter: blur(5px);
@@ -90,10 +95,10 @@ body, html {
     outline: none;
 }
 .alert-error {
-    background: #fee2e2;
-    color: #b91c1c;
+    background: #f797974f;
+    color: #cc3131;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 9px;
     margin-bottom: 15px;
     font-size: 0.85rem;
 }
