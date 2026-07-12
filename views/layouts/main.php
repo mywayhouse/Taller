@@ -82,7 +82,7 @@
                         </a>
                     </li>
                     <li class="nav-item <?= $currentPage === 'logs' ? 'active' : '' ?>">
-                        <a href="<?= APP_URL ?>/logs" class="nav-link">
+                        <a href="<?= APP_URL ?>/auditoria" class="nav-link">
                             <span class="material-icons-outlined nav-icon">history</span>
                             <span class="nav-text">Auditoría</span>
                         </a>

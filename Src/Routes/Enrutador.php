@@ -59,7 +59,7 @@ class Enrutador
 
     private function showError(int $code, string $message): void
     {
-        /* --- CÓDIGO TEMPORAL PARA DEPURAR ---
+        /*--- CÓDIGO TEMPORAL PARA DEPURAR ---
         echo "<div style='background:#f8d7da; color:#721c24; padding:20px; border:1px solid #f5c6cb; font-family:sans-serif;'>";
         echo "<h2>Error de Enrutamiento ({$code})</h2>";
         echo "<p><strong>Motivo exacto:</strong> {$message}</p>";
