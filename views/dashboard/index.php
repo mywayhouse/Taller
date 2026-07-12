@@ -4,19 +4,19 @@
 <div class="dashboard-stats">
     <div class="stat-card">
         <h3>Órdenes Pendientes</h3>
-        <p class="stat-number">0</p>
+        <p class="stat-number"><?= $ordenes_pendientes ?? 0 ?></p>
     </div>
     <div class="stat-card">
         <h3>Clientes Registrados</h3>
-        <p class="stat-number">0</p>
+        <p class="stat-number"><?= $clientes_activos ?? 0 ?></p>
     </div>
     <div class="stat-card">
         <h3>Vehículos en Taller</h3>
-        <p class="stat-number">0</p>
+        <p class="stat-number"><?= $vehiculos_en_taller ?? 0 ?></p>
     </div>
     <div class="stat-card">
         <h3>Repuestos Stock Bajo</h3>
-        <p class="stat-number">0</p>
+        <p class="stat-number"><?= $repuestos_stock_bajo ?? 0 ?></p>
     </div>
 </div>
 
@@ -33,9 +33,20 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="4" class="text-center">No hay órdenes recientes.</td>
-                </tr>
+                <?php if (empty($ultimasOrdenes)): ?>
+                    <tr>
+                        <td colspan="4" class="text-center">No hay órdenes recientes.</td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($ultimasOrdenes as $orden): ?>
+                        <tr>
+                            <td><?= $orden['id_orden'] ?></td>
+                            <td><?= htmlspecialchars($orden['nombre_cliente'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($orden['marca'] ?? '') . ' ' . htmlspecialchars($orden['modelo'] ?? '') ?></td>
+                            <td><span class="badge badge-<?= strtolower(str_replace(' ', '-', $orden['estado'] ?? '')) ?>"><?= $orden['estado'] ?></span></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
