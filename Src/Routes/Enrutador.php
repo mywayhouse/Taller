@@ -15,7 +15,7 @@ class Enrutador
         $controllerName = $this->defaultController;
 
         if (!empty($urlParts[0])) {
-            $controllerName = ucfirst(strtolower($urlParts[0])) . 'Controller';
+            $controllerName = 'Controlador' . ucfirst(strtolower($urlParts[0]));
             array_shift($urlParts);
         }
 
@@ -53,6 +53,13 @@ class Enrutador
 
     private function showError(int $code, string $message): void
     {
+        /* --- CÓDIGO TEMPORAL PARA DEPURAR ---
+        echo "<div style='background:#f8d7da; color:#721c24; padding:20px; border:1px solid #f5c6cb; font-family:sans-serif;'>";
+        echo "<h2>Error de Enrutamiento ({$code})</h2>";
+        echo "<p><strong>Motivo exacto:</strong> {$message}</p>";
+        echo "</div>";
+        exit; // Detenemos la ejecución aquí para ver el error
+        */
         http_response_code($code);
         $title = "Error {$code}";
         $errorView = VIEWS . "/errors/{$code}.php";

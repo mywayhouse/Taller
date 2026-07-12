@@ -10,7 +10,9 @@
     
     <!-- CSS Global -->
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/main.css">
+    <!-- AUN NO EXISTE EL CSS ESPECÍFICO PARA CADA PÁGINA, POR ESO SE COMENTA
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/<?= $currentPage ?? 'dashboard' ?>.css">
+    -->
 </head>
 <body>
     <div class="layout-wrapper">
@@ -112,6 +114,12 @@
                         <li>
                             <a href="<?= APP_URL ?>/perfil" class="popup-link">
                                 <span class="material-icons-outlined">person</span>
+                                <span>It´s time to be awesome xdxdxdxd</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?= APP_URL ?>/perfil" class="popup-link">
+                                <span class="material-icons-outlined">person</span>
                                 <span>Mi Perfil</span>
                             </a>
                         </li>
@@ -165,6 +173,8 @@
 
     <!-- JS Global -->
     <script src="<?= PUBLIC_URL ?>/assets/js/main.js"></script>
+    <!-- AUN NO EXISTE EL JS ESPECÍFICO PARA CADA PÁGINA, POR ESO SE COMENTA
     <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
+    -->
 </body>
 </html>
