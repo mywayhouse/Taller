@@ -47,7 +47,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // Facilita la inclusión de archivos desde cualquier parte
 // del código usando rutas absolutas dinámicas.
 define('ROOT', dirname(__DIR__));
-define('APP', ROOT . '/Src');
+define('APP', ROOT . '/src');
 define('CONFIG', ROOT . '/config');
 define('VIEWS', ROOT . '/views');
 define('PUBLIC_URL', '/Taller/public');
