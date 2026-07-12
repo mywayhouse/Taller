@@ -16,7 +16,7 @@
             "Config\\": "config/"
         },
         "files": [
-            "Src/Helpers/functions.php"
+            "Src/Helpers/funciones.php"
         ]
     },
 

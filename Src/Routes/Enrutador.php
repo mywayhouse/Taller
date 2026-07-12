@@ -1,9 +1,9 @@
 <?php
 namespace App\Routes;
 
-class Router
+class Enrutador
 {
-    private string $defaultController = 'DashboardController';
+    private string $defaultController = 'ControladorPanel';
     private string $defaultMethod = 'index';
 
     public function dispatch(string $url): void

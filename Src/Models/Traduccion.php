@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use App\Core\Model;
+use App\Core\Modelo;
 
-class Traduccion extends Model
+class Traduccion extends Modelo
 {
     public function obtenerPorIdioma(string $codigoIdioma): array
     {

@@ -5,7 +5,7 @@ use PDO;
 use PDOException;
 use Exception;
 
-class Database
+class BaseDatos
 {
     private static ?PDO $instance = null;
 

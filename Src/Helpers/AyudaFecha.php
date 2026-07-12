@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 
-class DateHelper
+class AyudaFecha
 {
     public static function formatDate(?string $date): string
     {

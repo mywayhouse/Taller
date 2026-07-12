@@ -1,26 +1,26 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
-use App\bd\Database;
+use App\Core\Controlador;
+use App\bd\BaseDatos;
 
-class DashboardController extends Controller
+class ControladorPanel extends Controlador
 {
     public function index(): void
     {
         $this->requireAccess('dashboard');
-        
+
         // Obtener estadísticas del dashboard
-        $stats = Database::executeProcedure('sp_contar_dashboard');
+        $stats = BaseDatos::executeProcedure('sp_contar_dashboard');
         $stats = $stats[0] ?? [
             'ordenes_pendientes' => 0,
             'clientes_activos' => 0,
             'vehiculos_en_taller' => 0,
             'repuestos_stock_bajo' => 0
         ];
-        
+
         // Obtener últimas órdenes
-        $ultimasOrdenes = Database::executeProcedure('sp_listar_ordenes');
+        $ultimasOrdenes = BaseDatos::executeProcedure('sp_listar_ordenes');
         $ultimasOrdenes = array_slice($ultimasOrdenes, 0, 5);
 
         $data = [

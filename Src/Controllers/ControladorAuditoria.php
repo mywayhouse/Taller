@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
-use App\Helpers\AuditHelper;
+use App\Core\Controlador;
+use App\Helpers\AyudaAuditoria;
 
-class LogsController extends Controller
+class ControladorAuditoria extends Controlador
 {
     public function index(): void
     {

@@ -1,10 +1,10 @@
 <?php
-namespace Src\bd;
+namespace App\bd;
 
 use PDO;
 use PDOException;
 
-class ConnectionDB
+class ConexionBD
 {
     private static string $host = '';
     private static string $user = '';

@@ -1,7 +1,7 @@
 <?php
 namespace Src\Config;
 
-class ResponseHTTP
+class RespuestaHTTP
 {
     private static array $mensaje = [
         'status' => '',
