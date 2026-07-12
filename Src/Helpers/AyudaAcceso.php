@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 
-class AccessHelper
+class AyudaAcceso
 {
     private static array $permissions = [
         'dashboard' => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],

@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use App\Core\Model;
+use App\Core\Modelo;
 
-class Vehiculo extends Model
+class Vehiculo extends Modelo
 {
     public function obtenerTodos(): array
     {

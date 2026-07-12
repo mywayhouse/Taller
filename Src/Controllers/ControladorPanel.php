@@ -1,9 +1,9 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
+use App\Core\Controlador;
 
-class DashboardController extends Controller
+class ControladorPanel extends Controlador
 {
     public function index(): void
     {

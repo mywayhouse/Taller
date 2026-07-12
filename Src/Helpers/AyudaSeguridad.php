@@ -1,7 +1,7 @@
 <?php
 namespace App\Helpers;
 
-class SecurityHelper
+class AyudaSeguridad
 {
     public static function sanitize(string $input): string
     {

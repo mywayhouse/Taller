@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
+use App\Core\Controlador;
 use App\Models\Cliente;
 
-class ClientesController extends Controller
+class ControladorClientes extends Controlador
 {
     private Cliente $clienteModel;
 

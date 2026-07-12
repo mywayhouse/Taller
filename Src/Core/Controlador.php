@@ -1,16 +1,17 @@
 <?php
 namespace App\Core;
-use App\Helpers\AccessHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\LanguageHelper;
 
-class Controller
+use App\Helpers\AyudaAcceso;
+use App\Helpers\AyudaAuditoria;
+use App\Helpers\AyudaIdioma;
+
+class Controlador
 {
     public function __construct() {}
 
     protected function __(string $clave, string $default = ''): string
     {
-        return LanguageHelper::translate($clave, $default);
+        return AyudaIdioma::translate($clave, $default);
     }
 
     protected function render(string $view, array $data = []): void
@@ -69,13 +70,13 @@ class Controller
     protected function requireAccess(string $module): void
     {
         $this->requireAuth();
-        AccessHelper::requireAccess($module);
+        AyudaAcceso::requireAccess($module);
     }
 
     protected function requireWriteAccess(string $module): void
     {
         $this->requireAuth();
-        AccessHelper::requireWriteAccess($module);
+        AyudaAcceso::requireWriteAccess($module);
     }
 
     protected function checkAccess(string $module): bool
@@ -83,11 +84,11 @@ class Controller
         if (!isset($_SESSION['usuario_id'])) {
             return false;
         }
-        return AccessHelper::hasAccess($module);
+        return AyudaAcceso::hasAccess($module);
     }
 
     protected function audit(string $accion): void
     {
-        AuditHelper::logCurrentUser($accion);
+        AyudaAuditoria::logCurrentUser($accion);
     }
 }

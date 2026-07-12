@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
+use App\Core\Controlador;
 use App\Models\Vehiculo;
 
-class VehiculosController extends Controller
+class ControladorVehiculos extends Controlador
 {
     private Vehiculo $vehiculoModel;
 

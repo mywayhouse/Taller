@@ -4,9 +4,9 @@ namespace App\Helpers;
 use App\Models\Idioma;
 use App\Models\Traduccion;
 
-class LanguageHelper
+class AyudaIdioma
 {
-    private static ?LanguageHelper $instance = null;
+    private static ?AyudaIdioma $instance = null;
     private ?string $codigoActual = null;
     private array $diccionario = [];
     private array $idiomasDisponibles = [];

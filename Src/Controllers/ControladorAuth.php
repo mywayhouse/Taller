@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Core\Controller;
+use App\Core\Controlador;
 use App\Models\Usuario;
 
-class AuthController extends Controller
+class ControladorAuth extends Controlador
 {
     private Usuario $usuarioModel;
 

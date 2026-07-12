@@ -1,7 +1,7 @@
 <?php
 namespace Src\Config;
 
-class ErrorLogs
+class LogsErrores
 {
     public static function activar(): void
     {

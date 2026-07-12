@@ -1,14 +1,14 @@
 <?php
 namespace App\Helpers;
 
-use App\bd\Database;
+use App\bd\BaseDatos;
 
-class AuditHelper
+class AyudaAuditoria
 {
     public static function log(int $idUsuario, string $accion): int
     {
         $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        return Database::executeNonQuery('sp_registrar_log', [
+        return BaseDatos::executeNonQuery('sp_registrar_log', [
             ':id_usuario'   => $idUsuario,
             ':accion'       => $accion,
             ':ip_direccion' => $ip,
@@ -26,6 +26,6 @@ class AuditHelper
 
     public static function obtenerLogs(): array
     {
-        return Database::executeProcedure('sp_listar_logs');
+        return BaseDatos::executeProcedure('sp_listar_logs');
     }
 }

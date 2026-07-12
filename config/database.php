@@ -15,7 +15,7 @@ use PDO;
 use PDOException;
 use Exception;
 
-class Database
+class BaseDatos
 {
     /**
      * Instancia única de la conexión PDO.

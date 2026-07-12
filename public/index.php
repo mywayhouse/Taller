@@ -60,7 +60,7 @@ require_once CONFIG . '/config.php';
 // ----------------------------------------------------------
 // 7. INICIO DEL ROUTER
 // ----------------------------------------------------------
-use App\Routes\Router;
+use App\Routes\Enrutador;
 $url = isset($_GET['url']) ? $_GET['url'] : '';
-$router = new Router();
+$router = new Enrutador();
 $router->dispatch(trim($url, '/'));

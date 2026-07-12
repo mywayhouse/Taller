@@ -5,7 +5,7 @@ use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class Security
+class Seguridad
 {
     private static $jwt_data;
 
@@ -39,7 +39,7 @@ class Security
     public static function validateTokenJwt(string $token, string $key): object
     {
         if (!isset(getallheaders()['Authorization'])) {
-            die(json_encode(ResponseHTTP::status400("Para proceder el token de acceso es requerido!")));
+            die(json_encode(RespuestaHTTP::status400("Para proceder el token de acceso es requerido!")));
         }
         try {
             $jwt = explode(" ", getallheaders()['Authorization']);
@@ -48,7 +48,7 @@ class Security
             return self::$jwt_data;
         } catch (\Exception $e) {
             error_log('Token invalido o expiro: ' . $e->getMessage());
-            die(json_encode(ResponseHTTP::status401('Token invalido o ha expirado')));
+            die(json_encode(RespuestaHTTP::status401('Token invalido o ha expirado')));
         }
     }
 

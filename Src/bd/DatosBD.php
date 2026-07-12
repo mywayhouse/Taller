@@ -1,9 +1,9 @@
 <?php
-namespace Src\bd;
+namespace App\bd;
 
 use Dotenv\Dotenv;
 
-class DataDB
+class DatosBD
 {
     public static array $data = [];
 
@@ -22,6 +22,6 @@ class DataDB
 
         $host = 'mysql:host=' . self::$data['IP'] . ';port=' . self::$data['port'] . ';dbname=' . self::$data['DB'];
 
-        ConnectionDB::inicializar($host, self::$data['user'], self::$data['password']);
+        ConexionBD::inicializar($host, self::$data['user'], self::$data['password']);
     }
 }
