@@ -194,7 +194,7 @@ exit;
         $_SESSION['usuario_nombre'] = $usuario['nombre'];
         $_SESSION['usuario_rol']    = $usuario['rol'];
 
-        $this->redirect('dashboard');
+        $this->redirect('panel');
     }
 
     public function logout(): void
