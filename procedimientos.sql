@@ -442,3 +442,281 @@ BEGIN
     ORDER BY l.fecha_hora DESC;
 END//
 DELIMITER ;
+
+-- Buscar logs con filtros dinámicos
+DROP PROCEDURE IF EXISTS `sp_buscar_logs`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_logs`(
+    IN p_termino      VARCHAR(100),
+    IN p_fecha_desde  DATETIME,
+    IN p_fecha_hasta  DATETIME
+)
+BEGIN
+    SELECT l.id_log, l.accion, l.fecha_hora, l.ip_direccion,
+           u.nombre AS usuario_nombre, u.rol AS usuario_rol
+    FROM logs_sistema l
+    INNER JOIN usuarios u ON u.id_usuario = l.id_usuario
+    WHERE (p_termino = '' OR l.accion LIKE CONCAT('%', p_termino, '%')
+                          OR u.nombre LIKE CONCAT('%', p_termino, '%'))
+      AND (p_fecha_desde IS NULL OR l.fecha_hora >= p_fecha_desde)
+      AND (p_fecha_hasta IS NULL OR l.fecha_hora <= p_fecha_hasta)
+    ORDER BY l.fecha_hora DESC;
+END//
+DELIMITER ;
+
+-- ============================================================
+-- REPUESTOS (ampliación)
+-- ============================================================
+
+-- Actualizar un repuesto
+DROP PROCEDURE IF EXISTS `sp_actualizar_repuesto`;
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_repuesto`(
+    IN p_id_repuesto   INT,
+    IN p_nombre        VARCHAR(100),
+    IN p_stock_actual  INT,
+    IN p_stock_minimo  INT,
+    IN p_unidad_medida VARCHAR(20),
+    IN p_precio_venta  DECIMAL(10,2)
+)
+BEGIN
+    UPDATE repuestos
+    SET nombre        = p_nombre,
+        stock_actual  = p_stock_actual,
+        stock_minimo  = p_stock_minimo,
+        unidad_medida = p_unidad_medida,
+        precio_venta  = p_precio_venta
+    WHERE id_repuesto = p_id_repuesto;
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
+
+-- Eliminar (desactivar) un repuesto
+DROP PROCEDURE IF EXISTS `sp_eliminar_repuesto`;
+DELIMITER //
+CREATE PROCEDURE `sp_eliminar_repuesto`(
+    IN p_id_repuesto INT
+)
+BEGIN
+    UPDATE repuestos SET estado_activo = 0 WHERE id_repuesto = p_id_repuesto;
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
+
+-- Buscar repuestos con filtros dinámicos
+DROP PROCEDURE IF EXISTS `sp_buscar_repuestos`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_repuestos`(
+    IN p_termino    VARCHAR(100),
+    IN p_stock_bajo TINYINT
+)
+BEGIN
+    SELECT id_repuesto, nombre, stock_actual, stock_minimo,
+           unidad_medida, precio_venta, estado_activo
+    FROM repuestos
+    WHERE estado_activo = 1
+      AND (nombre LIKE CONCAT('%', p_termino, '%'))
+      AND (p_stock_bajo = 0 OR stock_actual <= stock_minimo)
+    ORDER BY nombre ASC;
+END//
+DELIMITER ;
+
+-- Buscar repuestos (versión completa con filtro de estado)
+DROP PROCEDURE IF EXISTS `sp_buscar_repuestos_todos`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_repuestos_todos`(
+    IN p_termino    VARCHAR(100),
+    IN p_stock_bajo TINYINT,
+    IN p_estado     TINYINT
+)
+BEGIN
+    SELECT id_repuesto, nombre, stock_actual, stock_minimo,
+           unidad_medida, precio_venta, estado_activo
+    FROM repuestos
+    WHERE (p_termino = '' OR nombre LIKE CONCAT('%', p_termino, '%'))
+      AND (p_stock_bajo = 0 OR stock_actual <= stock_minimo)
+      AND (p_estado = -1 OR estado_activo = p_estado)
+    ORDER BY nombre ASC;
+END//
+DELIMITER ;
+
+-- Ajustar stock de un repuesto (con registro en movimientos_inventario)
+DROP PROCEDURE IF EXISTS `sp_ajustar_stock_repuesto`;
+DELIMITER //
+CREATE PROCEDURE `sp_ajustar_stock_repuesto`(
+    IN p_id_repuesto   INT,
+    IN p_nuevo_stock   INT,
+    IN p_id_usuario    INT,
+    IN p_ip_direccion  VARCHAR(45),
+    IN p_observacion   TEXT
+)
+BEGIN
+    DECLARE v_stock_anterior INT;
+    DECLARE v_tipo VARCHAR(20);
+
+    SELECT stock_actual INTO v_stock_anterior
+    FROM repuestos WHERE id_repuesto = p_id_repuesto;
+
+    IF p_nuevo_stock > v_stock_anterior THEN
+        SET v_tipo = 'ENTRADA';
+    ELSEIF p_nuevo_stock < v_stock_anterior THEN
+        SET v_tipo = 'SALIDA';
+    ELSE
+        SET v_tipo = 'AJUSTE';
+    END IF;
+
+    UPDATE repuestos
+    SET stock_actual = p_nuevo_stock
+    WHERE id_repuesto = p_id_repuesto;
+
+    INSERT INTO movimientos_inventario
+        (id_repuesto, tipo, cantidad, stock_anterior, stock_nuevo,
+         id_usuario, ip_direccion, fecha_hora, observacion)
+    VALUES
+        (p_id_repuesto, v_tipo, ABS(p_nuevo_stock - v_stock_anterior),
+         v_stock_anterior, p_nuevo_stock,
+         p_id_usuario, p_ip_direccion, NOW(), p_observacion);
+
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
+
+-- Registrar movimiento manualmente
+DROP PROCEDURE IF EXISTS `sp_registrar_movimiento`;
+DELIMITER //
+CREATE PROCEDURE `sp_registrar_movimiento`(
+    IN p_id_repuesto   INT,
+    IN p_tipo          VARCHAR(20),
+    IN p_cantidad      INT,
+    IN p_stock_anterior INT,
+    IN p_stock_nuevo   INT,
+    IN p_id_usuario    INT,
+    IN p_ip_direccion  VARCHAR(45),
+    IN p_observacion   TEXT
+)
+BEGIN
+    INSERT INTO movimientos_inventario
+        (id_repuesto, tipo, cantidad, stock_anterior, stock_nuevo,
+         id_usuario, ip_direccion, fecha_hora, observacion)
+    VALUES
+        (p_id_repuesto, p_tipo, p_cantidad, p_stock_anterior, p_stock_nuevo,
+         p_id_usuario, p_ip_direccion, NOW(), p_observacion);
+END//
+DELIMITER ;
+
+-- Listar movimientos de un repuesto
+DROP PROCEDURE IF EXISTS `sp_listar_movimientos_repuesto`;
+DELIMITER //
+CREATE PROCEDURE `sp_listar_movimientos_repuesto`(
+    IN p_id_repuesto INT
+)
+BEGIN
+    SELECT m.id_movimiento, m.tipo, m.cantidad, m.stock_anterior,
+           m.stock_nuevo, m.fecha_hora, m.observacion,
+           u.nombre AS usuario_nombre
+    FROM movimientos_inventario m
+    INNER JOIN usuarios u ON u.id_usuario = m.id_usuario
+    WHERE m.id_repuesto = p_id_repuesto
+    ORDER BY m.fecha_hora DESC;
+END//
+DELIMITER ;
+
+-- ============================================================
+-- PROVEEDORES
+-- ============================================================
+
+-- Listar todos los proveedores
+DROP PROCEDURE IF EXISTS `sp_listar_proveedores`;
+DELIMITER //
+CREATE PROCEDURE `sp_listar_proveedores`()
+BEGIN
+    SELECT id_proveedor, nombre, contacto, telefono, correo, direccion, rtn, estado_activo
+    FROM proveedores
+    ORDER BY nombre ASC;
+END//
+DELIMITER ;
+
+-- Obtener proveedor por ID
+DROP PROCEDURE IF EXISTS `sp_obtener_proveedor_por_id`;
+DELIMITER //
+CREATE PROCEDURE `sp_obtener_proveedor_por_id`(
+    IN p_id_proveedor INT
+)
+BEGIN
+    SELECT * FROM proveedores WHERE id_proveedor = p_id_proveedor;
+END//
+DELIMITER ;
+
+-- Insertar nuevo proveedor
+DROP PROCEDURE IF EXISTS `sp_insertar_proveedor`;
+DELIMITER //
+CREATE PROCEDURE `sp_insertar_proveedor`(
+    IN p_nombre    VARCHAR(150),
+    IN p_contacto  VARCHAR(100),
+    IN p_telefono  VARCHAR(20),
+    IN p_correo    VARCHAR(100),
+    IN p_direccion TEXT,
+    IN p_rtn       VARCHAR(20)
+)
+BEGIN
+    INSERT INTO proveedores (nombre, contacto, telefono, correo, direccion, rtn, estado_activo)
+    VALUES (p_nombre, p_contacto, p_telefono, p_correo, p_direccion, p_rtn, 1);
+    SELECT LAST_INSERT_ID() AS id_proveedor;
+END//
+DELIMITER ;
+
+-- Actualizar proveedor
+DROP PROCEDURE IF EXISTS `sp_actualizar_proveedor`;
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_proveedor`(
+    IN p_id_proveedor INT,
+    IN p_nombre       VARCHAR(150),
+    IN p_contacto     VARCHAR(100),
+    IN p_telefono     VARCHAR(20),
+    IN p_correo       VARCHAR(100),
+    IN p_direccion    TEXT,
+    IN p_rtn          VARCHAR(20)
+)
+BEGIN
+    UPDATE proveedores
+    SET nombre    = p_nombre,
+        contacto  = p_contacto,
+        telefono  = p_telefono,
+        correo    = p_correo,
+        direccion = p_direccion,
+        rtn       = p_rtn
+    WHERE id_proveedor = p_id_proveedor;
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
+
+-- Eliminar (desactivar) proveedor
+DROP PROCEDURE IF EXISTS `sp_eliminar_proveedor`;
+DELIMITER //
+CREATE PROCEDURE `sp_eliminar_proveedor`(
+    IN p_id_proveedor INT
+)
+BEGIN
+    UPDATE proveedores SET estado_activo = 0 WHERE id_proveedor = p_id_proveedor;
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
+
+-- Buscar proveedores (filtro dinámico)
+DROP PROCEDURE IF EXISTS `sp_buscar_proveedores`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_proveedores`(
+    IN p_termino VARCHAR(100)
+)
+BEGIN
+    SELECT id_proveedor, nombre, contacto, telefono, correo, direccion, rtn, estado_activo
+    FROM proveedores
+    WHERE estado_activo = 1
+      AND (nombre   LIKE CONCAT('%', p_termino, '%')
+        OR contacto LIKE CONCAT('%', p_termino, '%')
+        OR telefono LIKE CONCAT('%', p_termino, '%')
+        OR correo   LIKE CONCAT('%', p_termino, '%')
+        OR rtn      LIKE CONCAT('%', p_termino, '%'))
+    ORDER BY nombre ASC;
+END//
+DELIMITER ;

@@ -66,6 +66,12 @@
                     <?php endif; ?>
 
                     <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA'])): ?>
+                    <li class="nav-item <?= $currentPage === 'proveedores' ? 'active' : '' ?>">
+                        <a href="<?= APP_URL ?>/proveedores" class="nav-link">
+                            <span class="material-icons-outlined nav-icon">local_shipping</span>
+                            <span class="nav-text">Proveedores</span>
+                        </a>
+                    </li>
                     <li class="nav-item <?= $currentPage === 'facturas' ? 'active' : '' ?>">
                         <a href="<?= APP_URL ?>/facturas" class="nav-link">
                             <span class="material-icons-outlined nav-icon">receipt_long</span>

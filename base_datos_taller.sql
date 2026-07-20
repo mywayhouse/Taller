@@ -120,6 +120,34 @@ CREATE TABLE IF NOT EXISTS `logs_sistema` (
 INSERT INTO `logs_sistema` (`id_log`, `id_usuario`, `accion`, `fecha_hora`, `ip_direccion`) VALUES
 	(1, 2, 'Usuario probando procedimiento', '2026-06-30 10:32:24', '127.0.0.1');
 
+-- Volcando estructura para tabla taller_mecanico.proveedores
+CREATE TABLE IF NOT EXISTS `proveedores` (
+  `id_proveedor`  INT AUTO_INCREMENT PRIMARY KEY,
+  `nombre`        VARCHAR(150) NOT NULL,
+  `contacto`      VARCHAR(100) DEFAULT NULL,
+  `telefono`      VARCHAR(20)  DEFAULT NULL,
+  `correo`        VARCHAR(100) DEFAULT NULL,
+  `direccion`     TEXT         DEFAULT NULL,
+  `rtn`           VARCHAR(20)  DEFAULT NULL,
+  `estado_activo` TINYINT(1)   DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando estructura para tabla taller_mecanico.movimientos_inventario
+CREATE TABLE IF NOT EXISTS `movimientos_inventario` (
+  `id_movimiento`  INT AUTO_INCREMENT PRIMARY KEY,
+  `id_repuesto`    INT NOT NULL,
+  `tipo`           ENUM('ENTRADA','SALIDA','AJUSTE') NOT NULL,
+  `cantidad`       INT NOT NULL,
+  `stock_anterior` INT NOT NULL,
+  `stock_nuevo`    INT NOT NULL,
+  `id_usuario`     INT NOT NULL,
+  `ip_direccion`   VARCHAR(45) DEFAULT NULL,
+  `fecha_hora`     DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `observacion`    TEXT DEFAULT NULL,
+  FOREIGN KEY (`id_repuesto`) REFERENCES `repuestos`(`id_repuesto`),
+  FOREIGN KEY (`id_usuario`)  REFERENCES `usuarios`(`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 -- Volcando estructura para tabla taller_mecanico.ordenes_servicio
 CREATE TABLE IF NOT EXISTS `ordenes_servicio` (
   `id_orden` int NOT NULL AUTO_INCREMENT,
