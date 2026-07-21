@@ -13,6 +13,9 @@
     <!-- AUN NO EXISTE EL CSS ESPECÍFICO PARA CADA PÁGINA, POR ESO SE COMENTA
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/<?= $currentPage ?? 'dashboard' ?>.css">
     -->
+
+<!--LLAMADA A LA LIBRERIA DE CHARTS-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="layout-wrapper">
@@ -173,8 +176,6 @@
 
     <!-- JS Global -->
     <script src="<?= PUBLIC_URL ?>/assets/js/main.js"></script>
-    <!-- AUN NO EXISTE EL JS ESPECÍFICO PARA CADA PÁGINA, POR ESO SE COMENTA
     <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
-    -->
 </body>
 </html>

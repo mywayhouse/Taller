@@ -18,7 +18,24 @@
         <h3>Repuestos Stock Bajo</h3>
         <p class="stat-number"><?= $repuestos_stock_bajo ?? 0 ?></p>
     </div>
+    <div class="stat-card">
+        <h3>Tiempo promedio de pedidos</h3>
+        <p class="stat-number"><?= $tiempo_promedio_pedidos ?? 0 ?></p> <!-- LEVOM: AQIO ESTA ÁRA QIE LLAMES EL PROCEDIMIENTO DEL PROMEDIO DE TIEMPO DE FINALIZACION DE PEDIDOS, OKEY?-->
+    </div>
 </div>
+<!--CHARTS-->
+<div class="content-chart">
+
+    <div class="chart-rep">
+        <canvas id="graficoRepuestos"></canvas>
+    </div>
+
+    <div class="chart-Ingreso">
+        <canvas id="graficoIngresosMecanico"></canvas>
+    </div>
+</div>
+
+
 
 <div class="dashboard-panels">
     <div class="panel">
