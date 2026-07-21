@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'right',
@@ -85,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
             data: data,
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: true,
