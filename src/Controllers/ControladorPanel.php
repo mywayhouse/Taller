@@ -22,6 +22,7 @@ class ControladorPanel extends Controlador
         //CHARTS
         $repuestosMasVendidos = BaseDatos::executeProcedure('sp_repuestos_mas_vendidos');
         $ingresosSemanales = BaseDatos::executeProcedure('sp_ingresos_semanales');
+        $ordenesMecanicoMes = BaseDatos::executeProcedure('sp_ordenes_mec_mes');
         // Obtener últimas órdenes
         $ultimasOrdenes = BaseDatos::executeProcedure('sp_listar_ordenes');
         $ultimasOrdenes = array_slice($ultimasOrdenes, 0, 5);
@@ -47,6 +48,7 @@ class ControladorPanel extends Controlador
             'ingresos_totales' => json_encode(array_column($ingresosSemanales, 'ingresos_totales')),
             'ingresos_mano_obra' => json_encode(array_column($ingresosSemanales, 'ingresos_mano_obra')),
             'ingresos_semanales_raw' => json_encode($ingresosSemanales),
+            'ordenes_mecanicos_raw' => json_encode($ordenesMecanicoMes),
         ];
 
 

@@ -66,6 +66,11 @@
 </div>
 
 
+<div class="chart-mecanicos" class="content-chart-full">
+    <div style="height: 350px;">
+        <canvas id="graficoOrdenesMecanicoMes"></canvas>
+    </div>
+</div>
 
 <div class="dashboard-panels">
     <div class="panel">
@@ -102,4 +107,5 @@
     window.chartRepuestosLabels = <?= $repuestos_labels ?? '[]' ?>;
     window.chartRepuestosData = <?= $repuestos_data ?? '[]' ?>;
     window.ingresosSemanalesRaw = <?= $ingresos_semanales_raw ?? '[]' ?>;
+    window.ordenesMecanicosRaw = <?= $ordenes_mecanicos_raw ?? '[]' ?>;
 </script>

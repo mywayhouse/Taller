@@ -520,3 +520,20 @@ BEGIN
     ORDER BY WEEKDAY(f.fecha_emision) ASC;
 END//
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS `sp_ordenes_mec_mes`;
+DELIMITER //
+CREATE PROCEDURE `sp_ordenes_mec_mes`()
+BEGIN
+    SELECT 
+        DATE_FORMAT(o.fecha_ingreso, '%Y-%m') AS mes_anio,
+        DATE_FORMAT(o.fecha_ingreso, '%M') AS mes_nombre,
+        u.nombre AS mecanico,
+        COUNT(o.id_orden) AS total_ordenes
+    FROM ordenes_servicio o
+    JOIN usuarios u ON o.id_mecanico = u.id_usuario
+    WHERE u.rol = 'MECANICO'
+    GROUP BY mes_anio, mes_nombre, u.id_usuario, u.nombre
+    ORDER BY mes_anio ASC;
+END//
+DELIMITER ;
