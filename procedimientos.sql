@@ -372,6 +372,7 @@ DELIMITER ;
 
 -- Obtener conteos para el panel principal
 DROP PROCEDURE IF EXISTS `sp_contar_dashboard`;
+
 DELIMITER //
 CREATE PROCEDURE `sp_contar_dashboard`()
 BEGIN
@@ -379,7 +380,10 @@ BEGIN
         (SELECT COUNT(*) FROM ordenes_servicio WHERE estado != 'ENTREGADO') AS ordenes_pendientes,
         (SELECT COUNT(*) FROM clientes WHERE estado_activo = 1) AS clientes_activos,
         (SELECT COUNT(*) FROM ordenes_servicio WHERE estado IN ('RECIBIDO','EN PROCESO')) AS vehiculos_en_taller,
-        (SELECT COUNT(*) FROM repuestos WHERE stock_actual <= stock_minimo AND estado_activo = 1) AS repuestos_stock_bajo;
+        (SELECT COUNT(*) FROM repuestos WHERE stock_actual <= stock_minimo AND estado_activo = 1) AS repuestos_stock_bajo,
+        (SELECT COALESCE(AVG(TIMESTAMPDIFF(HOUR, fecha_ingreso, fecha_entrega)), 0) 
+         FROM ordenes_servicio 
+         WHERE estado IN ('ENTREGADO', 'LISTO') AND fecha_entrega IS NOT NULL) AS tiempo_promedio_pedidos;
 END//
 DELIMITER ;
 
@@ -453,6 +457,7 @@ END //
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS `sp_tiempo_promedio_ordenes`;
 DELIMITER //
 CREATE PROCEDURE `sp_tiempo_promedio_ordenes`()
 BEGIN
@@ -462,7 +467,7 @@ BEGIN
             0
         ) AS tiempo_promedio_horas
     FROM ordenes_servicio
-    WHERE estado = 'ENTREGADO' 
+    WHERE estado IN ('ENTREGADO', 'LISTO') 
       AND fecha_entrega IS NOT NULL;
 END//
 DELIMITER ;
