@@ -36,6 +36,7 @@ $actionUrl = $esEdicion
         <div class="input-group">
             <input
                 type="text"
+                name="rnt_dni"
                 id="rtn_dni"
                 placeholder="Ingrese RTN/DNI y presione Buscar"
                 maxlength="20"

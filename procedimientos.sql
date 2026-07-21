@@ -442,3 +442,13 @@ BEGIN
     ORDER BY l.fecha_hora DESC;
 END//
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_buscar_cliente_por_rtn(IN p_rtn VARCHAR(50))
+BEGIN
+    SELECT id_cliente, nombre, rnt_dni 
+    FROM clientes 
+    WHERE rnt_dni = p_rtn;
+END //
+
+DELIMITER ;
