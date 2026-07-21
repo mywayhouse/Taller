@@ -466,3 +466,25 @@ BEGIN
       AND fecha_entrega IS NOT NULL;
 END//
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_repuesto` (
+    IN p_id_repuesto INT,
+    IN p_nombre VARCHAR(100),
+    IN p_stock_actual INT,
+    IN p_stock_minimo INT,
+    IN p_unidad_medida VARCHAR(20),
+    IN p_precio_venta DECIMAL(10,2)
+)
+BEGIN
+    UPDATE repuestos
+    SET nombre = p_nombre,
+        stock_actual = p_stock_actual,
+        stock_minimo = p_stock_minimo,
+        unidad_medida = p_unidad_medida,
+        precio_venta = p_precio_venta
+    WHERE id_repuesto = p_id_repuesto;
+
+    SELECT ROW_COUNT() AS filas_afectadas;
+END//
+DELIMITER ;
