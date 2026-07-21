@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'right' },
+                    legend: { display: false},
                     title: { display: true, text: 'Repuestos más vendidos' }
                 },
                 scales: {
