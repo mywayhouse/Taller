@@ -4,23 +4,25 @@ namespace App\Helpers;
 class AyudaAcceso
 {
     private static array $permissions = [
-        'dashboard' => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
-        'clientes'  => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
-        'vehiculos' => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
-        'ordenes'   => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
-        'repuestos' => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
-        'facturas'  => ['ADMINISTRADOR', 'RECEPCIONISTA'],
-        'usuarios'  => ['ADMINISTRADOR'],
-        'logs'      => ['ADMINISTRADOR'],
+        'dashboard'   => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
+        'clientes'    => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
+        'vehiculos'   => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
+        'ordenes'     => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
+        'repuestos'   => ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'],
+        'proveedores' => ['ADMINISTRADOR', 'RECEPCIONISTA'],
+        'facturas'    => ['ADMINISTRADOR', 'RECEPCIONISTA'],
+        'usuarios'    => ['ADMINISTRADOR'],
+        'logs'        => ['ADMINISTRADOR'],
     ];
 
     private static array $writePermissions = [
-        'clientes'  => ['ADMINISTRADOR', 'RECEPCIONISTA'],
-        'vehiculos' => ['ADMINISTRADOR', 'RECEPCIONISTA'],
-        'ordenes'   => ['ADMINISTRADOR', 'RECEPCIONISTA'],
-        'repuestos' => ['ADMINISTRADOR'],
-        'facturas'  => ['ADMINISTRADOR'],
-        'usuarios'  => ['ADMINISTRADOR'],
+        'clientes'    => ['ADMINISTRADOR', 'RECEPCIONISTA'],
+        'vehiculos'   => ['ADMINISTRADOR', 'RECEPCIONISTA'],
+        'ordenes'     => ['ADMINISTRADOR', 'RECEPCIONISTA'],
+        'repuestos'   => ['ADMINISTRADOR'],
+        'proveedores' => ['ADMINISTRADOR'],
+        'facturas'    => ['ADMINISTRADOR'],
+        'usuarios'    => ['ADMINISTRADOR'],
     ];
 
     public static function hasAccess(string $module): bool

@@ -648,6 +648,188 @@ ul { list-style: none; }
     padding: 6px 12px;
 }
 
+/* ---------- Search Bar ---------- */
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+    background: var(--white);
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ---------- Toolbar ---------- */
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+/* ---------- New Badges ---------- */
+.badge-alert {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-ok {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-entrada {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-salida {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-ajuste {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* ---------- Row States ---------- */
+.row-warning {
+    background-color: #fffbeb !important;
+}
+
+.row-warning:hover {
+    background-color: #fef3c7 !important;
+}
+
+.text-danger {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ---------- Cards ---------- */
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* ---------- Info Card ---------- */
+.info-card {
+    background: var(--white);
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.info-card p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.info-card p strong {
+    color: var(--text-secondary);
+}
+
+/* ---------- Inline Form ---------- */
+.form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.form-inline .form-group {
+    margin-bottom: 0;
+}
+
+.form-inline .form-group label {
+    display: inline;
+    margin-right: 6px;
+    margin-bottom: 0;
+}
+
+/* ---------- Form Row ---------- */
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* ---------- Button Info ---------- */
+.btn-info {
+    background: #3b82f6;
+    color: var(--white);
+}
+
+.btn-info:hover {
+    background: #2563eb;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
     .sidebar {
