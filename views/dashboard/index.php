@@ -98,3 +98,8 @@
         </table>
     </div>
 </div>
+<script>
+    window.chartRepuestosLabels = <?= $repuestos_labels ?? '[]' ?>;
+    window.chartRepuestosData = <?= $repuestos_data ?? '[]' ?>;
+    window.ingresosSemanalesRaw = <?= $ingresos_semanales_raw ?? '[]' ?>;
+</script>

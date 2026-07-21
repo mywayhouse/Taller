@@ -1,18 +1,23 @@
-//REPUESTOS MAS VENDIDOS
+
+//REPUESTOS MÁS VENDIDOS
 document.addEventListener("DOMContentLoaded", function() {
     const canvasElement = document.getElementById('graficoRepuestos');
     if (canvasElement) {
-        const labels = ['Pastillas de freno', 'Filtro de aceite', 'Bujías', 'Amortiguadores', 'Batería']; //AQUI AGREGA EL ARREGLO DE LOS REPUESTOS MAS VENDIDOS
+        const rawLabels = window.chartRepuestosLabels;
+        const rawData = window.chartRepuestosData;
+
+        const labels = (rawLabels && rawLabels.length > 0) ? rawLabels : ['Sin datos'];
+        const datosValores = (rawData && rawData.length > 0) ? rawData : [0];
+
         const data = {
             labels: labels,
-            datasets: [
-                {
-                    label: 'Cantidad Vendida',
-                    data: [85, 72, 60, 45, 30], // AQUI AGREGA EL ARREGLO DE DATOS DE LA CANTIDAD DEL REPUESTO TOTAL
-                    borderColor: 'rgb(54, 162, 235)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                }
-            ]
+            datasets: [{
+                label: 'Cantidad Vendida',
+                data: datosValores,
+                borderColor: 'rgb(54, 162, 235)',
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderWidth: 2
+            }]
         };
 
         const config = {
@@ -20,23 +25,16 @@ document.addEventListener("DOMContentLoaded", function() {
             data: data,
             options: {
                 indexAxis: 'y',
-                elements: {
-                    bar: {
-                        borderWidth: 2,
-                    }
-                },
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'right',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Repuestos más vendidos'
-                    }
+                    legend: { position: 'right' },
+                    title: { display: true, text: 'Repuestos más vendidos' }
+                },
+                scales: {
+                    x: { beginAtZero: true }
                 }
-            },
+            }
         };
 
         new Chart(canvasElement, config);
@@ -45,37 +43,54 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-//INGRESOS VS MECANICO
+//INGRESOS SEMANALES
 document.addEventListener("DOMContentLoaded", function() {
     const canvasMecanicos = document.getElementById('graficoIngresosMecanico');
     
     if (canvasMecanicos) {
-        // 1. Las etiquetas son los días de la semana (eje temporal)
-        const labelsSemanales = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        const diasEspanol = {
+            'Monday': 'Lunes',
+            'Tuesday': 'Martes',
+            'Wednesday': 'Miércoles',
+            'Thursday': 'Jueves',
+            'Friday': 'Viernes',
+            'Saturday': 'Sábado',
+            'Sunday': 'Domingo'
+        };
+
+        const diasOrdenados = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        
+        let datosTotalesFinales = [0, 0, 0, 0, 0, 0, 0];
+        let datosManoObraFinales = [0, 0, 0, 0, 0, 0, 0];
+
+        const registrosDB = window.ingresosSemanalesRaw || [];
+
+        registrosDB.forEach(item => {
+            let diaEsp = diasEspanol[item.dia_semana] || item.dia_semana;
+            let index = diasOrdenados.indexOf(diaEsp);
+            if (index !== -1) {
+                datosTotalesFinales[index] = parseFloat(item.ingresos_totales);
+                datosManoObraFinales[index] = parseFloat(item.ingresos_mano_obra);
+            }
+        });
 
         const data = {
-            labels: labelsSemanales,
+            labels: diasOrdenados,
             datasets: [
                 {
                     label: 'Ingresos Totales por Pedido',
-                    // Datos de ejemplo por día de la semana (vienen de tu BD)
-                    data: [450, 600, 350, 800, 950, 1200, 300], 
-                    borderColor: 'rgb(54, 162, 235)', // Azul
+                    data: datosTotalesFinales, 
+                    borderColor: 'rgb(54, 162, 235)',
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    pointStyle: 'circle',
                     pointRadius: 6,
-                    pointHoverRadius: 10,
-                    tension: 0.1 // Opcional: suaviza un poco las líneas
+                    tension: 0.1
                 },
                 {
                     label: 'Ingresos por Mecánico / Mano de Obra',
-                    // Datos de la parte correspondiente a los mecánicos por día
-                    data: [150, 200, 120, 300, 350, 450, 100], 
-                    borderColor: 'rgb(255, 99, 132)', // Rojo
+                    data: datosManoObraFinales, 
+                    borderColor: 'rgb(255, 99, 132)',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    pointStyle: 'circle',
                     pointRadius: 6,
-                    pointHoverRadius: 10,
                     tension: 0.1
                 }
             ]
@@ -92,15 +107,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         display: true,
                         text: 'Comparativa Semanal: Ingresos de Pedidos vs Ingresos por Mecánico'
                     },
-                    legend: {
-                        position: 'top',
-                    }
+                    legend: { position: 'top' }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        // Si manejas moneda, puedes agregar un formato de símbolo si lo deseas
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         };

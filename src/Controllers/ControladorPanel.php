@@ -19,7 +19,9 @@ class ControladorPanel extends Controlador
             'repuestos_stock_bajo' => 0,
             'tiempo_promedio_pedidos' => 0
         ];
-
+        //CHARTS
+        $repuestosMasVendidos = BaseDatos::executeProcedure('sp_repuestos_mas_vendidos');
+        $ingresosSemanales = BaseDatos::executeProcedure('sp_ingresos_semanales');
         // Obtener últimas órdenes
         $ultimasOrdenes = BaseDatos::executeProcedure('sp_listar_ordenes');
         $ultimasOrdenes = array_slice($ultimasOrdenes, 0, 5);
@@ -38,7 +40,16 @@ class ControladorPanel extends Controlador
             'repuestos_stock_bajo' => $stats['repuestos_stock_bajo'],
             'tiempo_promedio_pedidos' => $tiempoPromedio,
             'ultimasOrdenes' => $ultimasOrdenes,
+
+            //DATOS DE JSON A JS PARA EL CHART
+            'repuestos_labels' => json_encode(array_column($repuestosMasVendidos, 'repuesto')),
+            'repuestos_data' => json_encode(array_column($repuestosMasVendidos, 'total_vendido')),
+            'ingresos_totales' => json_encode(array_column($ingresosSemanales, 'ingresos_totales')),
+            'ingresos_mano_obra' => json_encode(array_column($ingresosSemanales, 'ingresos_mano_obra')),
+            'ingresos_semanales_raw' => json_encode($ingresosSemanales),
         ];
+
+
         $this->renderWithLayout('dashboard/index', $data);
     }
 }

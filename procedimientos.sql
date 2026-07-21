@@ -488,3 +488,30 @@ BEGIN
     SELECT ROW_COUNT() AS filas_afectadas;
 END//
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `sp_repuestos_mas_vendidos`()
+BEGIN
+    SELECT 
+        r.nombre AS repuesto,
+        COALESCE(SUM(dr.cantidad), 0) AS total_vendido
+    FROM repuestos r
+    LEFT JOIN detalles_repuestos_orden dr ON r.id_repuesto = dr.id_repuesto
+    GROUP BY r.id_repuesto, r.nombre
+    ORDER BY total_vendido DESC
+    LIMIT 5;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `sp_ingresos_semanales`()
+BEGIN
+    SELECT 
+        DAYNAME(f.fecha_emision) AS dia_semana,
+        COALESCE(SUM(f.total_pagar), 0) AS ingresos_totales,
+        COALESCE(SUM(f.subtotal_mano_obra), 0) AS ingresos_mano_obra
+    FROM facturas f
+    GROUP BY WEEKDAY(f.fecha_emision), DAYNAME(f.fecha_emision)
+    ORDER BY WEEKDAY(f.fecha_emision) ASC;
+END//
+DELIMITER ;
