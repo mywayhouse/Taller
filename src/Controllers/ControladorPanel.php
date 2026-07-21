@@ -16,12 +16,17 @@ class ControladorPanel extends Controlador
             'ordenes_pendientes' => 0,
             'clientes_activos' => 0,
             'vehiculos_en_taller' => 0,
-            'repuestos_stock_bajo' => 0
+            'repuestos_stock_bajo' => 0,
+            'tiempo_promedio_pedidos' => 0
         ];
 
         // Obtener últimas órdenes
         $ultimasOrdenes = BaseDatos::executeProcedure('sp_listar_ordenes');
         $ultimasOrdenes = array_slice($ultimasOrdenes, 0, 5);
+        //tiempo promedio
+        $tiempoPromedio = isset($stats['tiempo_promedio_pedidos']) 
+            ? round($stats['tiempo_promedio_pedidos'], 1) . ' hrs' 
+            : '0 hrs';
 
         $data = [
             'title' => 'Panel de Control',
@@ -31,6 +36,7 @@ class ControladorPanel extends Controlador
             'clientes_activos' => $stats['clientes_activos'],
             'vehiculos_en_taller' => $stats['vehiculos_en_taller'],
             'repuestos_stock_bajo' => $stats['repuestos_stock_bajo'],
+            'tiempo_promedio_pedidos' => $tiempoPromedio,
             'ultimasOrdenes' => $ultimasOrdenes,
         ];
         $this->renderWithLayout('dashboard/index', $data);

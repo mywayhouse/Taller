@@ -452,3 +452,17 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE `sp_tiempo_promedio_ordenes`()
+BEGIN
+    SELECT 
+        COALESCE(
+            AVG(TIMESTAMPDIFF(HOUR, fecha_ingreso, fecha_entrega)),
+            0
+        ) AS tiempo_promedio_horas
+    FROM ordenes_servicio
+    WHERE estado = 'ENTREGADO' 
+      AND fecha_entrega IS NOT NULL;
+END//
+DELIMITER ;

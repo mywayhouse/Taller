@@ -47,7 +47,7 @@
         <div class="icon-stats">
             <div>
                 <h3>Tiempo promedio de pedidos</h3>
-                <p class="stat-number"><?= $tiempo_promedio_pedidos ?? 0 ?></p> <!-- LEVOM: AQIO ESTA ÁRA QIE LLAMES EL PROCEDIMIENTO DEL PROMEDIO DE TIEMPO DE FINALIZACION DE PEDIDOS, OKEY?-->
+                <p class="stat-number"><?= $tiempo_promedio_pedidos ?? 0 ?></p>
             </div>
             <span class="material-icons-outlined" style="font-size: 32px; color: var(--accent-color);">schedule</span>
         </div>
