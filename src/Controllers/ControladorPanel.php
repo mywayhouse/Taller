@@ -21,6 +21,7 @@ class ControladorPanel extends Controlador
         ];
         //CHARTS
         $repuestosMasVendidos = BaseDatos::executeProcedure('sp_repuestos_mas_vendidos');
+        $vehiculosFrecuentes = BaseDatos::executeProcedure('sp_modelos_vehiculos_frecuentes');
         $ingresosSemanales = BaseDatos::executeProcedure('sp_ingresos_semanales');
         $ordenesMecanicoMes = BaseDatos::executeProcedure('sp_ordenes_mec_mes');
         // Obtener últimas órdenes
@@ -45,6 +46,10 @@ class ControladorPanel extends Controlador
             //DATOS DE JSON A JS PARA EL CHART
             'repuestos_labels' => json_encode(array_column($repuestosMasVendidos, 'repuesto')),
             'repuestos_data' => json_encode(array_column($repuestosMasVendidos, 'total_vendido')),
+
+            'vehiculos_labels' => json_encode(array_column($vehiculosFrecuentes, 'modelo')),
+            'vehiculos_data' => json_encode(array_column($vehiculosFrecuentes, 'total_visitas')),
+            
             'ingresos_totales' => json_encode(array_column($ingresosSemanales, 'ingresos_totales')),
             'ingresos_mano_obra' => json_encode(array_column($ingresosSemanales, 'ingresos_mano_obra')),
             'ingresos_semanales_raw' => json_encode($ingresosSemanales),

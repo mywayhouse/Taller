@@ -537,3 +537,15 @@ BEGIN
     ORDER BY mes_anio ASC;
 END//
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE 'sp_modelos_vehiculos_frecuentes'()
+BEGIN
+    SELECT v.modelo, COUNT(*) AS total_visitas
+    FROM vehiculos v
+    INNER JOIN ordenes_servicio o ON o.placa_vehiculo = v.placa
+    GROUP BY v.modelo
+    ORDER BY total_visitas DESC
+    LIMIT 5;
+END //
+DELIMITER ;

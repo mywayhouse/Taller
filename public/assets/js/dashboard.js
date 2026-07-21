@@ -1,4 +1,46 @@
 
+//vehiculos MÁS VENDIDOS
+document.addEventListener("DOMContentLoaded", function() {
+    const canvasElement = document.getElementById('graficoModelosVehiculos');
+    if (canvasElement) {
+        const rawLabels = window.chartVehiculosLabels;
+        const rawData = window.chartVehiculosData;
+
+        const labels = (rawLabels && rawLabels.length > 0) ? rawLabels : ['Sin datos'];
+        const datosValores = (rawData && rawData.length > 0) ? rawData : [0];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Visitas al Taller',
+                data: datosValores,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderWidth: 2
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Modelos de Vehículos más Frecuentes' }
+                },
+                scales: {
+                    x: { beginAtZero: true }
+                }
+            }
+        };
+
+        new Chart(canvasElement, config);
+    }
+});
+
 //REPUESTOS MÁS VENDIDOS
 document.addEventListener("DOMContentLoaded", function() {
     const canvasElement = document.getElementById('graficoRepuestos');
@@ -40,7 +82,6 @@ document.addEventListener("DOMContentLoaded", function() {
         new Chart(canvasElement, config);
     }
 });
-
 
 
 //INGRESOS SEMANALES

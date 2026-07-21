@@ -57,15 +57,21 @@
 <div class="content-chart">
 
     <div class="chart-rep">
-        <canvas id="graficoRepuestos"></canvas>
+        <canvas id="graficoRepuestos" style="max-height: 300px;"></canvas>
     </div>
 
-    <div class="chart-Ingreso">
-        <canvas id="graficoIngresosMecanico"></canvas>
+    <div class="chart-vehiculos">
+        <canvas id="graficoModelosVehiculos" style="max-height: 300px;"></canvas>
     </div>
 </div>
 
 
+
+<div class="chart-mecanicos" class="content-chart-full">
+    <div class="chart-Ingreso">
+        <canvas id="graficoIngresosMecanico"></canvas>
+    </div>
+</div>
 <div class="chart-mecanicos" class="content-chart-full">
     <div style="height: 350px;">
         <canvas id="graficoOrdenesMecanicoMes"></canvas>
@@ -106,6 +112,11 @@
 <script>
     window.chartRepuestosLabels = <?= $repuestos_labels ?? '[]' ?>;
     window.chartRepuestosData = <?= $repuestos_data ?? '[]' ?>;
+
+    window.chartVehiculosLabels = <?= $vehiculos_labels ?>;
+    window.chartVehiculosData = <?= $vehiculos_data ?>;
+    
     window.ingresosSemanalesRaw = <?= $ingresos_semanales_raw ?? '[]' ?>;
+
     window.ordenesMecanicosRaw = <?= $ordenes_mecanicos_raw ?? '[]' ?>;
 </script>
