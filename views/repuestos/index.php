@@ -62,6 +62,7 @@
                             </span>
                         </td>
                         <td class="actions">
+                            <a href="<?= APP_URL ?>/repuestos/entrada/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-primary">Entrada</a>
                             <a href="<?= APP_URL ?>/repuestos/editar/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-edit">Editar</a>
                             <a href="<?= APP_URL ?>/repuestos/movimientos/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-info">Mov.</a>
                             <a href="<?= APP_URL ?>/repuestos/eliminar/<?= $r['id_repuesto'] ?>"

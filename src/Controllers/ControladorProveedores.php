@@ -17,18 +17,12 @@ class ControladorProveedores extends Controlador
     public function index(): void
     {
         $this->requireAccess('proveedores');
-        $termino = trim($this->getGet('q', ''));
-        if ($termino !== '') {
-            $proveedores = $this->proveedorModel->buscar($termino);
-        } else {
-            $proveedores = $this->proveedorModel->obtenerTodos();
-        }
+        $proveedores = $this->proveedorModel->obtenerTodos();
         $this->renderWithLayout('proveedores/index', [
             'title'       => 'Listado de Proveedores',
             'pageTitle'   => 'Proveedores',
             'currentPage' => 'proveedores',
             'proveedores' => $proveedores,
-            'q'           => $termino,
         ]);
     }
 
@@ -37,11 +31,11 @@ class ControladorProveedores extends Controlador
         $this->requireAccess('proveedores');
         $this->requireWriteAccess('proveedores');
         $this->renderWithLayout('proveedores/form', [
-            'title'       => 'Nuevo Proveedor',
-            'pageTitle'   => 'Registrar Proveedor',
+            'title'      => 'Nuevo Proveedor',
+            'pageTitle'  => 'Registrar Proveedor',
             'currentPage' => 'proveedores',
-            'proveedor'   => [],
-            'errores'     => $_SESSION['errores'] ?? [],
+            'proveedor'  => [],
+            'errores'    => $_SESSION['errores'] ?? [],
         ]);
         unset($_SESSION['errores']);
     }
@@ -56,21 +50,16 @@ class ControladorProveedores extends Controlador
         $nombre   = trim($this->getPost('nombre', ''));
         $contacto = trim($this->getPost('contacto', ''));
         $telefono = trim($this->getPost('telefono', ''));
-        $correo   = trim($this->getPost('correo', ''));
         $direccion = trim($this->getPost('direccion', ''));
-        $rtn      = trim($this->getPost('rtn', ''));
 
         $errores = [];
         if (empty($nombre)) $errores[] = 'El nombre del proveedor es obligatorio.';
-        if (!empty($correo) && !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-            $errores[] = 'El correo electrónico no es válido.';
-        }
         if (!empty($errores)) {
             $_SESSION['errores'] = $errores;
             $this->redirect('proveedores/crear');
         }
 
-        $this->proveedorModel->insertar($nombre, $contacto, $telefono, $correo, $direccion, $rtn);
+        $this->proveedorModel->insertar($nombre, $contacto, $telefono, $direccion);
         $this->audit("Creo el proveedor: {$nombre}");
         $_SESSION['mensaje'] = 'Proveedor registrado exitosamente.';
         $this->redirect('proveedores');
@@ -86,11 +75,11 @@ class ControladorProveedores extends Controlador
             return;
         }
         $this->renderWithLayout('proveedores/form', [
-            'title'       => 'Editar Proveedor',
-            'pageTitle'   => 'Editar Proveedor',
+            'title'      => 'Editar Proveedor',
+            'pageTitle'  => 'Editar Proveedor',
             'currentPage' => 'proveedores',
-            'proveedor'   => $proveedor,
-            'errores'     => $_SESSION['errores'] ?? [],
+            'proveedor'  => $proveedor,
+            'errores'    => $_SESSION['errores'] ?? [],
         ]);
         unset($_SESSION['errores']);
     }
@@ -102,14 +91,12 @@ class ControladorProveedores extends Controlador
         if (!$this->isPost()) {
             $this->redirect('proveedores');
         }
-        $nombre    = trim($this->getPost('nombre', ''));
-        $contacto  = trim($this->getPost('contacto', ''));
-        $telefono  = trim($this->getPost('telefono', ''));
-        $correo    = trim($this->getPost('correo', ''));
+        $nombre   = trim($this->getPost('nombre', ''));
+        $contacto = trim($this->getPost('contacto', ''));
+        $telefono = trim($this->getPost('telefono', ''));
         $direccion = trim($this->getPost('direccion', ''));
-        $rtn       = trim($this->getPost('rtn', ''));
 
-        $this->proveedorModel->actualizar($id, $nombre, $contacto, $telefono, $correo, $direccion, $rtn);
+        $this->proveedorModel->actualizar($id, $nombre, $contacto, $telefono, $direccion);
         $this->audit("Actualizo el proveedor ID {$id}: {$nombre}");
         $_SESSION['mensaje'] = 'Proveedor actualizado exitosamente.';
         $this->redirect('proveedores');
@@ -120,19 +107,11 @@ class ControladorProveedores extends Controlador
         $this->requireAccess('proveedores');
         $this->requireWriteAccess('proveedores');
         $proveedor = $this->proveedorModel->obtenerPorId($id);
-        $nombre    = $proveedor['nombre'] ?? "ID {$id}";
+        $nombre = $proveedor['nombre'] ?? "ID {$id}";
         $this->proveedorModel->eliminar($id);
-        $this->audit("Desactivo el proveedor: {$nombre}");
-        $_SESSION['mensaje'] = 'Proveedor desactivado exitosamente.';
+        $this->audit("Elimino el proveedor: {$nombre}");
+        $_SESSION['mensaje'] = 'Proveedor eliminado exitosamente.';
         $this->redirect('proveedores');
-    }
-
-    public function buscarAjax(): void
-    {
-        $this->requireAccess('proveedores');
-        $termino = trim($this->getGet('q', ''));
-        $resultados = $this->proveedorModel->buscar($termino);
-        $this->jsonResponse($resultados);
     }
 
     private function showError(int $code, string $message): void

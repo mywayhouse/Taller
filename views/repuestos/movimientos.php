@@ -46,6 +46,7 @@
                 <th>Cantidad</th>
                 <th>Stock Anterior</th>
                 <th>Stock Nuevo</th>
+                <th>Proveedor</th>
                 <th>Usuario</th>
                 <th>Fecha / Hora</th>
                 <th>Observación</th>
@@ -54,7 +55,7 @@
         <tbody>
             <?php if (empty($movimientos)): ?>
                 <tr>
-                    <td colspan="8" class="text-center">No hay movimientos registrados.</td>
+                    <td colspan="9" class="text-center">No hay movimientos registrados.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($movimientos as $m): ?>
@@ -68,6 +69,7 @@
                         <td><?= $m['cantidad'] ?></td>
                         <td><?= $m['stock_anterior'] ?></td>
                         <td><?= $m['stock_nuevo'] ?></td>
+                        <td><?= htmlspecialchars($m['proveedor_nombre'] ?? '-') ?></td>
                         <td><?= htmlspecialchars($m['usuario_nombre']) ?></td>
                         <td><?= htmlspecialchars($m['fecha_hora']) ?></td>
                         <td><?= htmlspecialchars($m['observacion'] ?? '-') ?></td>
