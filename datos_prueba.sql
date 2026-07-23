@@ -149,7 +149,9 @@ INSERT INTO `facturas` (`numero_factura`, `fecha_emision`, `subtotal_mano_obra`,
 UPDATE ordenes_servicio 
 SET fecha_ingreso = '2026-06-15 08:30:00' 
 WHERE id_orden = 1;
-
+-- 1. Insertar una orden nueva de prueba (ej. con el vehículo de la placa HAA1001)
+INSERT INTO `ordenes_servicio` (`diagnostico_preliminar`, `estado`, `fecha_ingreso`, `id_recepcionista`, `id_mecanico`, `placa_vehiculo`, `costo_mano_obra`) 
+VALUES ('Revisión extra para nueva factura', 'ENTREGADO', '2026-07-22 14:00:00', 2, 3, 'HAA1001', 450.00);
 
 -- 9. Volver a activar la verificación de llaves foráneas
 SET FOREIGN_KEY_CHECKS = 1;
