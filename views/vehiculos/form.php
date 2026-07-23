@@ -103,6 +103,31 @@ $actionUrl = $esEdicion
         </select>
     </div>
 
+    <div id="camposMoto" class="moto-fields" style="display: <?= ($vehiculo['tipo'] ?? '') === 'Motocicleta' ? 'block' : 'none' ?>;">
+        <div class="form-group">
+            <label for="cilindraje">Cilindraje (CC) *</label>
+            <input
+                type="number"
+                name="cilindraje"
+                id="cilindraje"
+                value="<?= htmlspecialchars($vehiculo['cilindraje'] ?? '') ?>"
+                min="50"
+                max="9999"
+                placeholder="Ej: 150"
+            >
+        </div>
+        <div class="form-group">
+            <label for="tipo_moto">Tipo de Motocicleta *</label>
+            <select name="tipo_moto" id="tipo_moto">
+                <option value="">Seleccione tipo</option>
+                <?php $tiposMoto = ['Deportiva', 'Cruiser', 'Naked', 'Enduro', 'Scooter', 'Touring', 'Doble Propósito']; ?>
+                <?php foreach ($tiposMoto as $tm): ?>
+                    <option value="<?= $tm ?>" <?= ($vehiculo['tipo_moto'] ?? '') === $tm ? 'selected' : '' ?>><?= $tm ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">
             <?= $esEdicion ? 'Actualizar Vehículo' : 'Guardar Vehículo' ?>
@@ -113,4 +138,19 @@ $actionUrl = $esEdicion
 
 <script>
     const buscarClienteUrl = '<?= APP_URL ?>/vehiculos/buscarClienteAjax';
+
+    document.getElementById('tipo').addEventListener('change', function() {
+        const camposMoto = document.getElementById('camposMoto');
+        const cilindraje = document.getElementById('cilindraje');
+        const tipoMoto = document.getElementById('tipo_moto');
+        if (this.value === 'Motocicleta') {
+            camposMoto.style.display = 'block';
+            cilindraje.required = true;
+            tipoMoto.required = true;
+        } else {
+            camposMoto.style.display = 'none';
+            cilindraje.required = false;
+            tipoMoto.required = false;
+        }
+    });
 </script>
