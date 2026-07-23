@@ -43,7 +43,7 @@
 }
 
 .factura-titulo p {
-    font-size: 13px;
+    font-size: 14px;
     margin: 2px 0;
 }
 
@@ -116,41 +116,6 @@
 
 .factura-totales .total-final span:last-child {
     font-size: 20px;
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 14px 28px;
-}
-
-.info-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.info-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-secondary);
-    font-weight: 600;
-}
-
-.info-value {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.info-item select.form-input {
-    font-size: 14px;
-    padding: 6px 10px;
-    border-radius: 4px;
-    border: 1px solid #d1d5db;
-    background: #fff;
-    width: 100%;
 }
 
 @media print {

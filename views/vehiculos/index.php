@@ -14,7 +14,6 @@
                 <th>Modelo</th>
                 <th>Año</th>
                 <th>Tipo</th>
-                <th>Cilindraje</th>
                 <th>Cliente</th>
                 <th>Acciones</th>
             </tr>
@@ -22,7 +21,7 @@
         <tbody>
             <?php if (empty($vehiculos)): ?>
                 <tr>
-                    <td colspan="8" class="text-center">No hay vehículos registrados.</td>
+                    <td colspan="7" class="text-center">No hay vehículos registrados.</td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($vehiculos as $v): ?>
@@ -32,7 +31,6 @@
                         <td><?= htmlspecialchars($v['modelo']) ?></td>
                         <td><?= $v['anio'] ?></td>
                         <td><?= htmlspecialchars($v['tipo']) ?></td>
-                        <td><?= $v['cilindraje'] ? htmlspecialchars($v['cilindraje']) . ' CC' : '-' ?></td>
                         <td><?= htmlspecialchars($v['nombre_cliente']) ?></td>
                         <td class="actions">
                             <a href="<?= APP_URL ?>/vehiculos/editar/<?= urlencode($v['placa']) ?>" class="btn btn-sm btn-edit">Editar</a>

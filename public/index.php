@@ -50,7 +50,7 @@ define('ROOT', dirname(__DIR__));
 define('APP', ROOT . '/src');
 define('CONFIG', ROOT . '/config');
 define('VIEWS', ROOT . '/views');
-define('PUBLIC_URL', '/Taller');
+define('PUBLIC_URL', '/Taller/public');
 
 // ----------------------------------------------------------
 // 6. CARGA DE CONFIGURACIÓN GLOBAL

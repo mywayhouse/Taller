@@ -46,7 +46,7 @@ if (file_exists($envFile)) {
 // ----------------------------------------------------------
 // CONSTANTES DE LA APLICACIÓN
 // ----------------------------------------------------------
-define('APP_NAME', $_ENV['APP_NAME'] ?? 'Taller Mecanico');
+define('APP_NAME', $_ENV['APP_NAME'] ?? 'Auto & Motos');
 define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost/Taller');
 define('APP_DEBUG', filter_var($_ENV['APP_DEBUG'] ?? true, FILTER_VALIDATE_BOOLEAN));
 
@@ -54,9 +54,9 @@ define('APP_DEBUG', filter_var($_ENV['APP_DEBUG'] ?? true, FILTER_VALIDATE_BOOLE
 // DATOS DE LA EMPRESA (Facturación)
 // ----------------------------------------------------------
 define('EMPRESA_NOMBRE', $_ENV['EMPRESA_NOMBRE'] ?? 'Auto & Motos');
-define('EMPRESA_DIRECCION', $_ENV['EMPRESA_DIRECCION'] ?? 'Boulevard del Norte, contiguo a la rotonda de la 10 calle, San Pedro Sula, Cortés, Honduras');
-define('EMPRESA_TELEFONO', $_ENV['EMPRESA_TELEFONO'] ?? '(+504) 2234-5678');
-define('EMPRESA_RTN', $_ENV['EMPRESA_RTN'] ?? '08019026123456');
+define('EMPRESA_DIRECCION', $_ENV['EMPRESA_DIRECCION'] ?? 'Col. Ejemplo, Ave. Principal, Local #1, San Pedro Sula');
+define('EMPRESA_TELEFONO', $_ENV['EMPRESA_TELEFONO'] ?? '+504 9999-9999');
+define('EMPRESA_RTN', $_ENV['EMPRESA_RTN'] ?? '0801-1990-00000');
 define('EMPRESA_CORREO', $_ENV['EMPRESA_CORREO'] ?? 'info@auto&motos.com');
 
 // ----------------------------------------------------------

@@ -43,11 +43,13 @@
                             <a href="<?= APP_URL ?>/facturas/ver/<?= $factura['id_factura'] ?>" class="btn btn-sm btn-edit">
                                 Ver
                             </a>
-                            <a href="<?= APP_URL ?>/facturas/eliminar/<?= $factura['id_factura'] ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Eliminar permanentemente esta factura? Esta acción no se puede deshacer.')">
-                                Eliminar
-                            </a>
+                            <?php if ($factura['estado_activo'] ?? 1): ?>
+                                <a href="<?= APP_URL ?>/facturas/anular/<?= $factura['id_factura'] ?>"
+                                   class="btn btn-sm btn-delete"
+                                   onclick="return confirm('¿Anular esta factura?')">
+                                    Anular
+                                </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

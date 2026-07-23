@@ -3,18 +3,15 @@ namespace App\Controllers;
 
 use App\Core\Controlador;
 use App\Models\Repuesto;
-use App\Models\Proveedor;
 
 class ControladorRepuestos extends Controlador
 {
     private Repuesto $repuestoModel;
-    private Proveedor $proveedorModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->repuestoModel = new Repuesto();
-        $this->proveedorModel = new Proveedor();
     }
 
     public function index(): void
@@ -182,58 +179,6 @@ class ControladorRepuestos extends Controlador
         $this->audit("Ajusto stock del repuesto ID {$id} ({$repuesto['nombre']}): {$tipo} " . abs($diferencia) . " unidades (nuevo stock: {$nuevoStock})");
         $this->audit("Ajusto inventario: {$repuesto['nombre']} - {$tipo} " . abs($diferencia) . " unidades");
         $_SESSION['mensaje'] = "Stock ajustado exitosamente. {$tipo}: " . abs($diferencia) . " unidades.";
-        $this->redirect('repuestos/movimientos/' . $id);
-    }
-
-    public function entrada(int $id): void
-    {
-        $this->requireAccess('repuestos');
-        $this->requireWriteAccess('repuestos');
-        $repuesto = $this->repuestoModel->obtenerPorId($id);
-        if (!$repuesto) {
-            $this->showError(404, 'Repuesto no encontrado.');
-            return;
-        }
-        $proveedores = $this->proveedorModel->obtenerTodos();
-        $this->renderWithLayout('repuestos/entrada', [
-            'title'       => 'Entrada de ' . $repuesto['nombre'],
-            'pageTitle'   => 'Entrada de Stock: ' . htmlspecialchars($repuesto['nombre']),
-            'currentPage' => 'repuestos',
-            'repuesto'    => $repuesto,
-            'proveedores' => $proveedores,
-            'errores'     => $_SESSION['errores'] ?? [],
-        ]);
-        unset($_SESSION['errores']);
-    }
-
-    public function guardarEntrada(int $id): void
-    {
-        $this->requireAccess('repuestos');
-        $this->requireWriteAccess('repuestos');
-        if (!$this->isPost()) {
-            $this->redirect('repuestos');
-        }
-        $repuesto = $this->repuestoModel->obtenerPorId($id);
-        if (!$repuesto) {
-            $this->showError(404, 'Repuesto no encontrado.');
-            return;
-        }
-        $cantidad     = (int) $this->getPost('cantidad', 0);
-        $idProveedor  = $this->getPost('id_proveedor', '') !== '' ? (int) $this->getPost('id_proveedor', '') : null;
-        $observacion  = trim($this->getPost('observacion', ''));
-
-        $errores = [];
-        if ($cantidad <= 0) $errores[] = 'La cantidad debe ser mayor a cero.';
-        if (!empty($errores)) {
-            $_SESSION['errores'] = $errores;
-            $this->redirect('repuestos/entrada/' . $id);
-        }
-
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
-        $idUsuario = (int) ($_SESSION['usuario_id'] ?? 0);
-        $this->repuestoModel->registrarEntrada($id, $cantidad, $idProveedor, $idUsuario, $ip, $observacion);
-        $this->audit("Registro entrada de {$cantidad} unidades del repuesto {$repuesto['nombre']} (ID {$id})");
-        $_SESSION['mensaje'] = "Entrada de {$cantidad} unidades registrada exitosamente.";
         $this->redirect('repuestos/movimientos/' . $id);
     }
 

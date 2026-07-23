@@ -13,36 +13,47 @@ class Proveedor extends Modelo
     public function obtenerPorId(int $id): ?array
     {
         $result = $this->callProcedure('sp_obtener_proveedor_por_id', [
-            ':p_id_proveedor' => $id,
+            ':id_proveedor' => $id,
         ]);
         return $result[0] ?? null;
     }
 
-    public function insertar(string $nombre, ?string $contacto, ?string $telefono, ?string $direccion): int
+    public function insertar(string $nombre, ?string $contacto, ?string $telefono, ?string $correo, ?string $direccion, ?string $rtn): int
     {
         return $this->callNonQuery('sp_insertar_proveedor', [
-            ':p_nombre'    => $nombre,
-            ':p_contacto'  => $contacto ?? '',
-            ':p_telefono'  => $telefono ?? '',
-            ':p_direccion' => $direccion ?? '',
+            ':nombre'    => $nombre,
+            ':contacto'  => $contacto ?? '',
+            ':telefono'  => $telefono ?? '',
+            ':correo'    => $correo ?? '',
+            ':direccion' => $direccion ?? '',
+            ':rtn'       => $rtn ?? '',
         ]);
     }
 
-    public function actualizar(int $id, string $nombre, ?string $contacto, ?string $telefono, ?string $direccion): int
+    public function actualizar(int $id, string $nombre, ?string $contacto, ?string $telefono, ?string $correo, ?string $direccion, ?string $rtn): int
     {
         return $this->callNonQuery('sp_actualizar_proveedor', [
-            ':p_id_proveedor' => $id,
-            ':p_nombre'       => $nombre,
-            ':p_contacto'     => $contacto ?? '',
-            ':p_telefono'     => $telefono ?? '',
-            ':p_direccion'    => $direccion ?? '',
+            ':id_proveedor' => $id,
+            ':nombre'       => $nombre,
+            ':contacto'     => $contacto ?? '',
+            ':telefono'     => $telefono ?? '',
+            ':correo'       => $correo ?? '',
+            ':direccion'    => $direccion ?? '',
+            ':rtn'          => $rtn ?? '',
         ]);
     }
 
     public function eliminar(int $id): int
     {
         return $this->callNonQuery('sp_eliminar_proveedor', [
-            ':p_id_proveedor' => $id,
+            ':id_proveedor' => $id,
+        ]);
+    }
+
+    public function buscar(string $termino): array
+    {
+        return $this->callProcedure('sp_buscar_proveedores', [
+            ':termino' => $termino,
         ]);
     }
 }

@@ -82,16 +82,4 @@ class Repuesto extends Modelo
             ':id_repuesto' => $idRepuesto,
         ]);
     }
-
-    public function registrarEntrada(int $idRepuesto, int $cantidad, ?int $idProveedor, int $idUsuario, string $ip, string $observacion = ''): int
-    {
-        return $this->callNonQuery('sp_registrar_entrada_repuesto', [
-            ':id_repuesto'  => $idRepuesto,
-            ':cantidad'     => $cantidad,
-            ':id_proveedor' => $idProveedor,
-            ':id_usuario'   => $idUsuario,
-            ':ip_direccion' => $ip,
-            ':observacion'  => $observacion,
-        ]);
-    }
 }

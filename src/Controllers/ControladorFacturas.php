@@ -5,7 +5,6 @@ use App\Core\Controlador;
 use App\Models\Factura;
 use App\Models\Cliente;
 use App\Models\Vehiculo;
-use App\Models\Usuario;
 use Dompdf\Dompdf;
 
 class ControladorFacturas extends Controlador
@@ -39,18 +38,12 @@ class ControladorFacturas extends Controlador
         $ordenesDisponibles = $this->facturaModel->obtenerOrdenesDisponibles();
         $numeroFactura = $this->facturaModel->generarNumeroFactura();
 
-        $usuarioModel = new Usuario();
-        $recepcionistas = $usuarioModel->obtenerPorRol('RECEPCIONISTA');
-        $mecanicos = $usuarioModel->obtenerPorRol('MECANICO');
-
         $data = [
             'title'              => 'Nueva Factura',
             'pageTitle'          => 'Generar Factura',
             'currentPage'        => 'facturas',
             'ordenesDisponibles' => $ordenesDisponibles,
             'numeroFactura'      => $numeroFactura,
-            'recepcionistas'     => $recepcionistas,
-            'mecanicos'          => $mecanicos,
             'errores'            => $_SESSION['errores'] ?? [],
         ];
         unset($_SESSION['errores']);
@@ -69,9 +62,7 @@ class ControladorFacturas extends Controlador
         $idOrden = (int) $this->getPost('id_orden', 0);
         $metodoPago = trim($this->getPost('metodo_pago', ''));
         $numeroFactura = trim($this->getPost('numero_factura', ''));
-        $serviciosJson = trim($this->getPost('servicios_json', '[]'));
-        $idRecepcionista = $this->getPost('id_recepcionista_factura', '') !== '' ? (int) $this->getPost('id_recepcionista_factura', '') : null;
-        $idMecanico = $this->getPost('id_mecanico_factura', '') !== '' ? (int) $this->getPost('id_mecanico_factura', '') : null;
+        $costoManoObra = (float) $this->getPost('costo_mano_obra', 0);
 
         $errores = [];
         if ($idOrden <= 0) {
@@ -89,33 +80,24 @@ class ControladorFacturas extends Controlador
             $this->redirect('facturas/crear');
         }
 
-        $servicios = json_decode($serviciosJson, true) ?? [];
-        $subtotalServicios = 0;
-        foreach ($servicios as $s) {
-            $subtotalServicios += (float) ($s['precio'] ?? 0);
-        }
-
         $repuestos = $this->facturaModel->obtenerRepuestosPorOrden($idOrden);
         $subtotalRepuestos = 0;
         foreach ($repuestos as $r) {
             $subtotalRepuestos += (float) ($r['total_linea'] ?? 0);
         }
 
-        $subtotal = $subtotalRepuestos + $subtotalServicios;
+        $subtotal = $subtotalRepuestos + $costoManoObra;
         $isv = round($subtotal * 0.15, 2);
         $totalPagar = round($subtotal + $isv, 2);
 
         $this->facturaModel->insertar(
             $numeroFactura,
-            $subtotalServicios,
+            $costoManoObra,
             $subtotalRepuestos,
             $isv,
             $totalPagar,
             $idOrden,
-            $metodoPago,
-            $serviciosJson,
-            $idRecepcionista,
-            $idMecanico
+            $metodoPago
         );
 
         $this->audit("Generó factura {$numeroFactura} para orden #{$idOrden}");
@@ -160,23 +142,6 @@ class ControladorFacturas extends Controlador
         $this->facturaModel->anular($id);
         $this->audit("Anuló factura {$factura['numero_factura']}");
         $_SESSION['mensaje'] = "Factura {$factura['numero_factura']} anulada.";
-        $this->redirect('facturas');
-    }
-
-    public function eliminar(int $id): void
-    {
-        $this->requireAccess('facturas');
-        $this->requireWriteAccess('facturas');
-
-        $factura = $this->facturaModel->obtenerPorId($id);
-        if (!$factura) {
-            $this->showError(404, 'Factura no encontrada.');
-            return;
-        }
-
-        $this->facturaModel->eliminar($id);
-        $this->audit("Eliminó factura {$factura['numero_factura']}");
-        $_SESSION['mensaje'] = "Factura {$factura['numero_factura']} eliminada permanentemente.";
         $this->redirect('facturas');
     }
 
@@ -227,145 +192,40 @@ class ControladorFacturas extends Controlador
 
         $repuestos = $this->facturaModel->obtenerRepuestosPorOrden($factura['id_orden']);
 
-        $servicios = json_decode($factura['servicios_json'] ?? '[]', true) ?? [];
-
-        $azul = '#1a3a6b';
-
-        $recepcionista = $factura['factura_recepcionista_nombre'] ?? $factura['recepcionista_nombre'] ?? '—';
-        $mecanico = $factura['factura_mecanico_nombre'] ?? $factura['mecanico_nombre'] ?? '—';
-
-        $itemsHtml = '';
-        foreach ($repuestos as $r) {
-            $itemsHtml .= '<tr>';
-            $itemsHtml .= '<td style="text-align:center;">' . (int)$r['cantidad'] . '</td>';
-            $itemsHtml .= '<td>' . htmlspecialchars($r['repuesto_nombre']) . '</td>';
-            $itemsHtml .= '<td style="text-align:right;">L. ' . number_format($r['precio_unitario_historico'], 2) . '</td>';
-            $itemsHtml .= '<td style="text-align:right;">L. ' . number_format($r['total_linea'], 2) . '</td>';
-            $itemsHtml .= '</tr>';
-        }
-        foreach ($servicios as $s) {
-            $precio = (float)($s['precio'] ?? 0);
-            $desc = htmlspecialchars($s['descripcion'] ?? 'Servicio');
-            $itemsHtml .= '<tr>';
-            $itemsHtml .= '<td style="text-align:center;">1</td>';
-            $itemsHtml .= '<td>' . $desc . '</td>';
-            $itemsHtml .= '<td style="text-align:right;">L. ' . number_format($precio, 2) . '</td>';
-            $itemsHtml .= '<td style="text-align:right;">L. ' . number_format($precio, 2) . '</td>';
-            $itemsHtml .= '</tr>';
-        }
-        if (empty($repuestos) && empty($servicios)) {
-            $itemsHtml = '<tr><td colspan="4" style="text-align:center;padding:10px;">Sin ítems</td></tr>';
-        }
-
-        $subtotal = $factura['subtotal_repuestos'] + $factura['subtotal_mano_obra'];
-        $estadoTexto = ($factura['estado_activo'] ?? 1) ? 'ACTIVA' : 'ANULADA';
-        $clienteNombre = htmlspecialchars($factura['cliente_nombre'] ?? '—');
-        $clienteRtn = htmlspecialchars($factura['rnt_dni'] ?? '—');
-        $clienteTel = htmlspecialchars($factura['cliente_telefono'] ?? '—');
-        $numFactura = htmlspecialchars($factura['numero_factura']);
-        $fecha = htmlspecialchars($factura['fecha_emision'] ?? '');
-        $fechaIngreso = htmlspecialchars($factura['fecha_ingreso'] ?? '');
-        $ordenId = htmlspecialchars($factura['id_orden']);
-        $metodoPago = htmlspecialchars($factura['metodo_pago'] ?? '—');
-        $empresa = htmlspecialchars(EMPRESA_NOMBRE);
-        $direccion = htmlspecialchars(EMPRESA_DIRECCION);
-        $tel = htmlspecialchars(EMPRESA_TELEFONO);
-        $rtn = htmlspecialchars(EMPRESA_RTN);
+        ob_start();
+        require_once VIEWS . '/facturas/ver.php';
+        $content = ob_get_clean();
 
         $html = '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">';
-        $html .= '<title>Factura ' . $numFactura . '</title>';
+        $html .= '<title>Factura ' . htmlspecialchars($factura['numero_factura']) . '</title>';
         $html .= '<style>
-            @page { margin: 15px; }
-            body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; font-size: 11px; color: #333; margin: 0; }
-            .page { padding: 5px 12px; }
-            .center { text-align: center; }
-            .dashed { border: none; border-top: 2px dashed ' . $azul . '; margin: 10px 0; }
-            .dashed-thin { border: none; border-top: 1px dashed ' . $azul . '; margin: 6px 0; }
-
-            .company-name { font-size: 16px; font-weight: 700; color: ' . $azul . '; margin: 4px 0; text-transform: uppercase; letter-spacing: 1px; }
-            .company-info { font-size: 10px; color: #555; margin: 1px 0; }
-            .info-section { width: 100%; margin: 8px 0; }
-            .info-section td { vertical-align: top; padding: 0 10px; width: 50%; }
-            .info-title { font-size: 10px; font-weight: 700; color: ' . $azul . '; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px; }
-            .info-line { font-size: 11px; color: #333; margin: 2px 0; }
-            .table-items { width: 100%; border-collapse: collapse; margin: 6px 0; }
-            .table-items th { background: ' . $azul . '; color: #fff; font-size: 10px; font-weight: 600; padding: 5px 8px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
-            .table-items th.left { text-align: left; }
-            .table-items td { padding: 4px 8px; font-size: 10px; border-bottom: 1px solid #ddd; }
-            .totals { width: 280px; margin-left: auto; margin-top: 6px; }
-            .totals td { padding: 3px 8px; font-size: 11px; }
-            .totals .label { text-align: right; }
-            .totals .value { text-align: right; font-weight: 600; }
-            .totals .total-label { text-align: right; font-size: 15px; font-weight: 900; color: ' . $azul . '; }
-            .totals .total-value { text-align: right; font-size: 16px; font-weight: 900; color: ' . $azul . '; }
-            .totals hr { border: none; border-top: 2px solid ' . $azul . '; margin: 2px 0; }
+            body { font-family: "Segoe UI", Arial, sans-serif; font-size: 13px; color: #333; margin: 20px; }
+            .factura-print { max-width: 800px; margin: 0 auto; padding: 20px; }
+            .factura-header { display: flex; justify-content: space-between; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 2px solid #3b82f6; }
+            .factura-empresa h2 { color: #3b82f6; margin: 0 0 5px; }
+            .factura-empresa p { color: #666; font-size: 12px; margin: 2px 0; }
+            .factura-titulo { text-align: right; }
+            .factura-titulo h1 { color: #3b82f6; font-size: 24px; margin: 0 0 5px; }
+            .badge-active { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+            .badge-inactive { background: #fce4ec; color: #c62828; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+            .factura-seccion { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 12px; }
+            .factura-seccion h3 { font-size: 14px; color: #3b82f6; margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid #ddd; }
+            table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+            th { background: #f1f5f9; text-align: left; padding: 6px 8px; font-size: 12px; border-bottom: 2px solid #ddd; }
+            td { padding: 6px 8px; border-bottom: 1px solid #eee; }
+            .text-center { text-align: center; }
+            .factura-totales { margin-top: 15px; max-width: 350px; margin-left: auto; }
+            .total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+            .total-final { border-top: 2px solid #3b82f6; padding-top: 8px; font-size: 16px; font-weight: bold; color: #3b82f6; }
         </style></head><body>';
-        $html .= '<div class="page">';
-
-        // -- HEADER --
-        $html .= '<div class="center">';
-        $html .= '<div class="company-name">' . $empresa . '</div>';
-        $html .= '<div class="company-info">' . $direccion . '</div>';
-        $html .= '<div class="company-info">Tel: ' . $tel . ' &nbsp;|&nbsp; RTN: ' . $rtn . '</div>';
-        $html .= '</div>';
-
-        $html .= '<hr class="dashed">';
-
-        // -- INFO BLOCK --
-        $html .= '<table class="info-section">';
-        $html .= '<tr>';
-        $html .= '<td>';
-        $html .= '<div class="info-title">FACTURAR A</div>';
-        $html .= '<div class="info-line"><strong>' . $clienteNombre . '</strong></div>';
-        $html .= '<div class="info-line">RTN: ' . $clienteRtn . '</div>';
-        $html .= '<div class="info-line">Tel: ' . $clienteTel . '</div>';
-        $html .= '</td>';
-        $html .= '<td>';
-        $html .= '<div class="info-title">DATOS FACTURA</div>';
-        $html .= '<div class="info-line"><strong>N°:</strong> ' . $numFactura . '</div>';
-        $html .= '<div class="info-line"><strong>Fecha:</strong> ' . $fecha . '</div>';
-        $html .= '<div class="info-line"><strong># Orden:</strong> ' . $ordenId . '</div>';
-        $html .= '<div class="info-line"><strong>Recepcionista:</strong> ' . $recepcionista . '</div>';
-        $html .= '<div class="info-line"><strong>Mecánico:</strong> ' . $mecanico . '</div>';
-        $html .= '<div class="info-line"><strong>Pago:</strong> ' . $metodoPago . '</div>';
-        $html .= '</td>';
-        $html .= '</tr>';
-        $html .= '</table>';
-
-        $html .= '<hr class="dashed">';
-
-        // -- TABLE --
-        $html .= '<table class="table-items">';
-        $html .= '<tr><th style="width:8%;">CANT</th><th class="left" style="width:52%;">DESCRIPCIÓN</th><th style="width:20%;">PRECIO U.</th><th style="width:20%;">IMPORTE</th></tr>';
-        $html .= $itemsHtml;
-        $html .= '</table>';
-
-        $html .= '<hr class="dashed-thin">';
-
-        // -- TOTALS --
-        $totalRep = $factura['subtotal_repuestos'];
-        $totalServ = $factura['subtotal_mano_obra'];
-        $isv = $factura['isv'];
-        $totalPagar = $factura['total_pagar'];
-        $html .= '<table class="totals">';
-        $html .= '<tr><td class="label">Subtotal Repuestos:</td><td class="value">L. ' . number_format($totalRep, 2) . '</td></tr>';
-        $html .= '<tr><td class="label">Subtotal Servicios:</td><td class="value">L. ' . number_format($totalServ, 2) . '</td></tr>';
-        $html .= '<tr><td class="label">Subtotal:</td><td class="value">L. ' . number_format($subtotal, 2) . '</td></tr>';
-        $html .= '<tr><td class="label">ISV (15%):</td><td class="value">L. ' . number_format($isv, 2) . '</td></tr>';
-        $html .= '<tr><td colspan="2"><hr></td></tr>';
-        $html .= '<tr><td class="total-label">TOTAL:</td><td class="total-value">L. ' . number_format($totalPagar, 2) . '</td></tr>';
-        $html .= '</table>';
-
-        $html .= '<hr class="dashed">';
-
-        $html .= '</div>'; // .page
+        $html .= '<div class="factura-print">' . $content . '</div>';
         $html .= '</body></html>';
 
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->setPaper('letter', 'portrait');
         $dompdf->render();
-        $dompdf->stream("factura_{$numFactura}.pdf", [
+        $dompdf->stream("factura_{$factura['numero_factura']}.pdf", [
             'Attachment' => true,
         ]);
         exit;

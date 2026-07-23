@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
     
     <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/main.css">
-    <?php $pageCssFile = ROOT . '/public/assets/css/' . ($currentPage ?? 'dashboard') . '.css'; ?>
-    <?php if (file_exists($pageCssFile)): ?>
-        <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/<?= $currentPage ?? 'dashboard' ?>.css">
+    <?php $pageCss = PUBLIC_URL . '/assets/css/' . ($currentPage ?? 'dashboard') . '.css'; ?>
+    <?php if (file_exists(ROOT . '/public' . str_replace(PUBLIC_URL, '', $pageCss))): ?>
+        <link rel="stylesheet" href="<?= $pageCss ?>">
     <?php endif; ?>
+
+<!--LLAMADA A LA LIBRERIA DE CHARTS-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="layout-wrapper">
@@ -66,12 +69,14 @@
                     <?php endif; ?>
 
                     <?php if (in_array($_SESSION['usuario_rol'] ?? '', ['ADMINISTRADOR', 'RECEPCIONISTA'])): ?>
+                        <!--
                     <li class="nav-item <?= $currentPage === 'proveedores' ? 'active' : '' ?>">
                         <a href="<?= APP_URL ?>/proveedores" class="nav-link">
-                            <span class="material-icons-outlined nav-icon">inventory_2</span>
+                            <span class="material-icons-outlined nav-icon">local_shipping</span>
                             <span class="nav-text">Proveedores</span>
                         </a>
                     </li>
+                    -->
                     <li class="nav-item <?= $currentPage === 'facturas' ? 'active' : '' ?>">
                         <a href="<?= APP_URL ?>/facturas" class="nav-link">
                             <span class="material-icons-outlined nav-icon">receipt_long</span>
@@ -177,10 +182,8 @@
         </main>
     </div>
 
+    <!-- JS Global -->
     <script src="<?= PUBLIC_URL ?>/assets/js/main.js"></script>
-    <?php $pageJsFile = ROOT . '/public/assets/js/' . ($currentPage ?? 'dashboard') . '.js'; ?>
-    <?php if (file_exists($pageJsFile)): ?>
-        <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
-    <?php endif; ?>
+    <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ class Vehiculo extends Modelo
         return $result[0] ?? null;
     }
 
-    public function insertar(string $placa, string $marca, string $modelo, int $anio, string $tipo, int $idCliente, ?int $cilindraje = null, ?string $tipoMoto = null): int
+    public function insertar(string $placa, string $marca, string $modelo, int $anio, string $tipo, int $idCliente): int
     {
         return $this->callNonQuery('sp_insertar_vehiculo', [
             ':p_placa'      => $placa,
@@ -26,13 +26,11 @@ class Vehiculo extends Modelo
             ':p_modelo'     => $modelo,
             ':p_anio'       => $anio,
             ':p_tipo'       => $tipo,
-            ':p_id_cliente' => $idCliente,
-            ':p_cilindraje' => $cilindraje,
-            ':p_tipo_moto'  => $tipoMoto
+            ':p_id_cliente' => $idCliente
         ]);
     }
 
-    public function actualizar(string $placa, string $marca, string $modelo, int $anio, string $tipo, int $idCliente, ?int $cilindraje = null, ?string $tipoMoto = null): int
+    public function actualizar(string $placa, string $marca, string $modelo, int $anio, string $tipo, int $idCliente): int
     {
         return $this->callNonQuery('sp_actualizar_vehiculo', [
             ':p_placa'      => $placa,
@@ -40,9 +38,7 @@ class Vehiculo extends Modelo
             ':p_modelo'     => $modelo,
             ':p_anio'       => $anio,
             ':p_tipo'       => $tipo,
-            ':p_id_cliente' => $idCliente,
-            ':p_cilindraje' => $cilindraje,
-            ':p_tipo_moto'  => $tipoMoto
+            ':p_id_cliente' => $idCliente
         ]);
     }
 

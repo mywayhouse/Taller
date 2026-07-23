@@ -55,8 +55,6 @@ class ControladorVehiculos extends Controlador
         $anio       = (int) $this->getPost('anio', 0);
         $tipo       = trim($this->getPost('tipo', ''));
         $idCliente  = (int) $this->getPost('id_cliente', 0);
-        $cilindraje = $tipo === 'Motocicleta' ? (int) $this->getPost('cilindraje', 0) : null;
-        $tipoMoto   = $tipo === 'Motocicleta' ? trim($this->getPost('tipo_moto', '')) : null;
 
         $errores = [];
         if (empty($placa))        $errores[] = 'La placa es obligatoria.';
@@ -65,12 +63,6 @@ class ControladorVehiculos extends Controlador
         if ($anio <= 1900)        $errores[] = 'El año no es valido.';
         if (empty($tipo))         $errores[] = 'El tipo es obligatorio.';
         if ($idCliente <= 0)      $errores[] = 'Debe seleccionar un cliente valido.';
-        if ($tipo === 'Motocicleta') {
-            if (empty($cilindraje) || $cilindraje < 50)
-                $errores[] = 'El cilindraje debe ser al menos 50 CC.';
-            if (empty($tipoMoto))
-                $errores[] = 'El tipo de motocicleta es obligatorio.';
-        }
 
         $existente = $this->vehiculoModel->obtenerPorPlaca($placa);
         if ($existente) {
@@ -81,7 +73,8 @@ class ControladorVehiculos extends Controlador
             $_SESSION['errores'] = $errores;
             $this->redirect('vehiculos/crear');
         }
-        $this->vehiculoModel->insertar($placa, $marca, $modelo, $anio, $tipo, $idCliente, $cilindraje, $tipoMoto);
+
+        $this->vehiculoModel->insertar($placa, $marca, $modelo, $anio, $tipo, $idCliente);
         $this->audit("Registro vehiculo: placa {$placa}");
         $_SESSION['mensaje'] = 'Vehiculo registrado exitosamente.';
         $this->redirect('vehiculos');
@@ -119,8 +112,6 @@ class ControladorVehiculos extends Controlador
         $anio       = (int) $this->getPost('anio', 0);
         $tipo       = trim($this->getPost('tipo', ''));
         $idCliente  = (int) $this->getPost('id_cliente', 0);
-        $cilindraje = $tipo === 'Motocicleta' ? (int) $this->getPost('cilindraje', 0) : null;
-        $tipoMoto   = $tipo === 'Motocicleta' ? trim($this->getPost('tipo_moto', '')) : null;
 
         $errores = [];
         if (empty($marca))        $errores[] = 'La marca es obligatoria.';
@@ -128,19 +119,13 @@ class ControladorVehiculos extends Controlador
         if ($anio <= 1900)        $errores[] = 'El año no es valido.';
         if (empty($tipo))         $errores[] = 'El tipo es obligatorio.';
         if ($idCliente <= 0)      $errores[] = 'Debe seleccionar un cliente valido.';
-        if ($tipo === 'Motocicleta') {
-            if (empty($cilindraje) || $cilindraje < 50)
-                $errores[] = 'El cilindraje debe ser al menos 50 CC.';
-            if (empty($tipoMoto))
-                $errores[] = 'El tipo de motocicleta es obligatorio.';
-        }
 
         if (!empty($errores)) {
             $_SESSION['errores'] = $errores;
             $this->redirect("vehiculos/editar/{$placa}");
         }
 
-        $this->vehiculoModel->actualizar($placa, $marca, $modelo, $anio, $tipo, $idCliente, $cilindraje, $tipoMoto);
+        $this->vehiculoModel->actualizar($placa, $marca, $modelo, $anio, $tipo, $idCliente);
         $this->audit("Actualizo vehiculo placa {$placa}");
         $_SESSION['mensaje'] = 'Vehiculo actualizado exitosamente.';
         $this->redirect('vehiculos');

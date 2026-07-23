@@ -12,21 +12,6 @@ class Enrutador
         $url = rtrim($url, '/');
         $urlParts = !empty($url) ? explode('/', $url) : [];
 
-        // ----------------------------------------------------------
-        // RUTAS DE API (/api/entidad/accion/param)
-        // ----------------------------------------------------------
-        if (!empty($urlParts[0]) && strtolower($urlParts[0]) === 'api' && !empty($urlParts[1])) {
-            $entity = ucfirst(strtolower($urlParts[1]));
-            $controllerName = 'ControladorApi' . $entity;
-            $methodName = !empty($urlParts[2]) ? strtolower($urlParts[2]) : 'index';
-            $params = array_slice($urlParts, 3);
-            $this->loadController($controllerName, $methodName, $params);
-            return;
-        }
-
-
-
-
         $controllerName = $this->defaultController;
 
         if (!empty($urlParts[0])) {
@@ -49,11 +34,6 @@ class Enrutador
 
         $params = $urlParts;
 
-        $this->loadController($controllerName, $methodName, $params);
-        }
-
-        private function loadController(string $controllerName, string $methodName, array $params): void{
-            
         $controllerClass = "App\\Controllers\\{$controllerName}";
         $controllerFile = APP . "/Controllers/{$controllerName}.php";
 
