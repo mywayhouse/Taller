@@ -43,8 +43,8 @@ class ControladorAuth extends Controlador
 
         $usuario = $this->usuarioModel->obtenerPorCorreo($correo);
 //Para depurar
-
 /*
+
 // 🔍 BLOQUE DE DEPURACIÓN MEJORADO
 echo "<pre style='background:#1a1a1a; color:#00ff00; padding:20px; margin:20px; font-size:14px;'>";
 echo "══════════════════════════════════════════════\n";

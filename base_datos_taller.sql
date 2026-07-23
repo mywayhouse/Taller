@@ -180,6 +180,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `correo` (`correo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+/*
 -- Volcando datos para la tabla taller_mecanico.usuarios: ~6 rows (aproximadamente)
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `correo`, `contrasenia`, `rol`, `estado_activo`) VALUES
 	(1, 'Carlos Admin', 'admin@taller.com', '$2y$12$CSMAZmb1R/30O76zjioZB.SHkTtr3zn1hqjEcd6Qk3eLWhGFvChFq', 'ADMINISTRADOR', 0),
@@ -188,7 +189,7 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `correo`, `contrasenia`, `rol`, 
 	(4, 'Erwin Montoya', 'admin@taller2.com', '$2y$12$r7PfNFKmQLPJN1pBk2gzDOq1Hd3TwLfvCv.bc4xjeIhfgq11.ZVYG', 'ADMINISTRADOR', 1),
 	(5, 'Rebeca Flores', 'rebeca.recepcion@taller.com', '$2y$12$Mcnq8tc2moQ/BcCZYTplMeoGp/TfgWaSdaIvdPdW8pxcB7IDU5YLy', 'RECEPCIONISTA', 1),
 	(6, 'Moisés Alvarenga', 'moises.mecanico@taller.com', '$2y$12$dPtfPl2RoyMWfoteaQfMRe5BcQk/gkCfNnsACYVUxANPjyxBNw0kG', 'MECANICO', 1);
-
+*/
 -- Volcando estructura para tabla taller_mecanico.vehiculos
 CREATE TABLE IF NOT EXISTS `vehiculos` (
   `placa` varchar(15) NOT NULL,
@@ -209,3 +210,5 @@ CREATE TABLE IF NOT EXISTS `vehiculos` (
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+ALTER TABLE facturas ADD COLUMN metodo_pago VARCHAR(50) DEFAULT NULL;
+ALTER TABLE facturas ADD COLUMN estado_activo TINYINT DEFAULT 1;
