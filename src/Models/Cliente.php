@@ -10,6 +10,13 @@ class Cliente extends Modelo
         return $this->callProcedure('sp_listar_clientes');
     }
 
+    public function buscar(string $termino): array
+    {
+        return $this->callProcedure('sp_buscar_clientes', [
+            ':p_termino' => $termino,
+        ]);
+    }
+
     public function obtenerPorId(int $id): ?array
     {
         $result = $this->callProcedure('sp_obtener_cliente_por_id', [

@@ -635,8 +635,12 @@ ul { list-style: none; }
     font-weight: 600;
 }
 
-.badge-active   { background: #d1fae5; color: #065f46; }
-.badge-inactive { background: #fee2e2; color: #991b1b; }
+.badge-active    { background: #d1fae5; color: #065f46; }
+.badge-inactive  { background: #fee2e2; color: #991b1b; }
+.badge-warning   { background: #fef3c7; color: #92400e; }
+.badge-info      { background: #dbeafe; color: #1e40af; }
+.badge-success   { background: #d1fae5; color: #065f46; }
+.badge-secondary { background: #e5e7eb; color: #374151; }
 
 /* ---------- Acciones en Tabla ---------- */
 .actions { 
@@ -678,6 +682,39 @@ ul { list-style: none; }
     border-color: var(--accent-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 10px;
+    background: var(--white);
+    padding: 16px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.search-select {
+    min-width: 160px;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius);
+    font-size: 14px;
+    background: var(--white);
+    transition: var(--transition);
+}
+
+.search-select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-control-static {
+    padding: 10px 0;
+    font-weight: 500;
+    color: var(--text-primary);
 }
 
 .checkbox-label {
@@ -771,6 +808,17 @@ ul { list-style: none; }
     padding: 20px;
 }
 
+.info-row {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.info-row strong {
+    display: inline-block;
+    min-width: 140px;
+    color: var(--text-secondary);
+}
+
 /* ---------- Info Card ---------- */
 .info-card {
     background: var(--white);
@@ -791,6 +839,10 @@ ul { list-style: none; }
 .info-card p strong {
     color: var(--text-secondary);
 }
+
+.text-right { text-align: right; }
+
+
 
 /* ---------- Inline Form ---------- */
 .form-inline {

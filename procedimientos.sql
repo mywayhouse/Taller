@@ -630,7 +630,7 @@ END//
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE 'sp_modelos_vehiculos_frecuentes'()
+CREATE PROCEDURE `sp_modelos_vehiculos_frecuentes`()
 BEGIN
     SELECT v.modelo, COUNT(*) AS total_visitas
     FROM vehiculos v
@@ -638,5 +638,247 @@ BEGIN
     GROUP BY v.modelo
     ORDER BY total_visitas DESC
     LIMIT 5;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- Migraciones adicionales (23/07/2026)
+-- ============================================================
+ALTER TABLE ordenes_servicio
+  MODIFY COLUMN estado ENUM('RECIBIDO','EN PROCESO','LISTO','ENTREGADO','PENDIENTE','CANCELADO') NOT NULL DEFAULT 'RECIBIDO',
+  ADD COLUMN estado_activo TINYINT(1) NOT NULL DEFAULT 1 AFTER costo_mano_obra;
+
+-- ============================================================
+-- sp_listar_ordenes (actualizado con cliente y estado_activo)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_listar_ordenes`;
+DELIMITER //
+CREATE PROCEDURE `sp_listar_ordenes`()
+BEGIN
+    SELECT o.id_orden, o.diagnostico_preliminar, o.estado,
+           o.fecha_ingreso, o.fecha_entrega,
+           o.placa_vehiculo, v.marca, v.modelo,
+           u_rec.nombre AS recepcionista,
+           u_mec.nombre AS mecanico,
+           c.nombre AS nombre_cliente
+    FROM ordenes_servicio o
+    INNER JOIN vehiculos v ON v.placa = o.placa_vehiculo
+    INNER JOIN clientes c ON c.id_cliente = v.id_cliente
+    INNER JOIN usuarios u_rec ON u_rec.id_usuario = o.id_recepcionista
+    INNER JOIN usuarios u_mec ON u_mec.id_usuario = o.id_mecanico
+    WHERE o.estado_activo = 1
+    ORDER BY o.fecha_ingreso DESC;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_buscar_ordenes
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_buscar_ordenes`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_ordenes`(
+    IN p_termino VARCHAR(100),
+    IN p_estado VARCHAR(20)
+)
+BEGIN
+    SET @query = 'SELECT o.id_orden, o.diagnostico_preliminar, o.estado, o.fecha_ingreso, o.fecha_entrega, o.placa_vehiculo, v.marca, v.modelo, u_rec.nombre AS recepcionista, u_mec.nombre AS mecanico, c.nombre AS nombre_cliente FROM ordenes_servicio o INNER JOIN vehiculos v ON v.placa = o.placa_vehiculo INNER JOIN clientes c ON c.id_cliente = v.id_cliente INNER JOIN usuarios u_rec ON u_rec.id_usuario = o.id_recepcionista INNER JOIN usuarios u_mec ON u_mec.id_usuario = o.id_mecanico WHERE o.estado_activo = 1';
+    IF p_termino IS NOT NULL AND p_termino != '' THEN
+        SET @query = CONCAT(@query, ' AND (o.id_orden LIKE ? OR v.placa LIKE ? OR v.marca LIKE ? OR v.modelo LIKE ? OR c.nombre LIKE ? OR o.diagnostico_preliminar LIKE ?)');
+    END IF;
+    IF p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @query = CONCAT(@query, ' AND o.estado = ?');
+    END IF;
+    SET @query = CONCAT(@query, ' ORDER BY o.fecha_ingreso DESC');
+    PREPARE stmt FROM @query;
+    IF p_termino IS NOT NULL AND p_termino != '' AND p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @t = CONCAT('%', p_termino, '%');
+        SET @e = p_estado;
+        EXECUTE stmt USING @t, @t, @t, @t, @t, @t, @e;
+    ELSEIF p_termino IS NOT NULL AND p_termino != '' THEN
+        SET @t = CONCAT('%', p_termino, '%');
+        EXECUTE stmt USING @t, @t, @t, @t, @t, @t;
+    ELSEIF p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @e = p_estado;
+        EXECUTE stmt USING @e;
+    ELSE
+        EXECUTE stmt;
+    END IF;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_actualizar_orden
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_actualizar_orden`;
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_orden`(
+    IN p_id_orden INT,
+    IN p_diagnostico_preliminar TEXT,
+    IN p_estado ENUM('RECIBIDO','EN PROCESO','LISTO','ENTREGADO','PENDIENTE','CANCELADO'),
+    IN p_id_mecanico INT,
+    IN p_placa_vehiculo VARCHAR(15),
+    IN p_costo_mano_obra DECIMAL(10,2)
+)
+BEGIN
+    UPDATE ordenes_servicio
+    SET diagnostico_preliminar = p_diagnostico_preliminar,
+        estado = p_estado,
+        id_mecanico = p_id_mecanico,
+        placa_vehiculo = p_placa_vehiculo,
+        costo_mano_obra = p_costo_mano_obra,
+        fecha_entrega = IF(p_estado = 'ENTREGADO', NOW(), fecha_entrega)
+    WHERE id_orden = p_id_orden;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_eliminar_orden (soft delete)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_eliminar_orden`;
+DELIMITER //
+CREATE PROCEDURE `sp_eliminar_orden`(IN p_id_orden INT)
+BEGIN
+    UPDATE ordenes_servicio SET estado_activo = 0 WHERE id_orden = p_id_orden;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- Migración: columna tipo_servicio (23/07/2026)
+-- ============================================================
+ALTER TABLE ordenes_servicio
+  ADD COLUMN tipo_servicio ENUM('REVISION','CLIENTE_TRAE_REPUESTO','REPUESTO_TIENDA') DEFAULT 'REVISION' AFTER placa_vehiculo;
+
+-- ============================================================
+-- sp_listar_ordenes (actualizada con tipo_servicio y cliente)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_listar_ordenes`;
+DELIMITER //
+CREATE PROCEDURE `sp_listar_ordenes`()
+BEGIN
+    SELECT o.id_orden, o.diagnostico_preliminar, o.estado,
+           o.fecha_ingreso, o.fecha_entrega,
+           o.placa_vehiculo, v.marca, v.modelo,
+           u_rec.nombre AS recepcionista,
+           u_mec.nombre AS mecanico,
+           c.nombre AS nombre_cliente,
+           o.tipo_servicio
+    FROM ordenes_servicio o
+    INNER JOIN vehiculos v ON v.placa = o.placa_vehiculo
+    INNER JOIN clientes c ON c.id_cliente = v.id_cliente
+    INNER JOIN usuarios u_rec ON u_rec.id_usuario = o.id_recepcionista
+    INNER JOIN usuarios u_mec ON u_mec.id_usuario = o.id_mecanico
+    WHERE o.estado_activo = 1
+    ORDER BY o.fecha_ingreso DESC;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_buscar_ordenes (actualizada con tipo_servicio)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_buscar_ordenes`;
+DELIMITER //
+CREATE PROCEDURE `sp_buscar_ordenes`(
+    IN p_termino VARCHAR(100),
+    IN p_estado VARCHAR(20)
+)
+BEGIN
+    SET @query = 'SELECT o.id_orden, o.diagnostico_preliminar, o.estado, o.fecha_ingreso, o.fecha_entrega, o.placa_vehiculo, v.marca, v.modelo, u_rec.nombre AS recepcionista, u_mec.nombre AS mecanico, c.nombre AS nombre_cliente, o.tipo_servicio FROM ordenes_servicio o INNER JOIN vehiculos v ON v.placa = o.placa_vehiculo INNER JOIN clientes c ON c.id_cliente = v.id_cliente INNER JOIN usuarios u_rec ON u_rec.id_usuario = o.id_recepcionista INNER JOIN usuarios u_mec ON u_mec.id_usuario = o.id_mecanico WHERE o.estado_activo = 1';
+    IF p_termino IS NOT NULL AND p_termino != '' THEN
+        SET @query = CONCAT(@query, ' AND (o.id_orden LIKE ? OR v.placa LIKE ? OR v.marca LIKE ? OR v.modelo LIKE ? OR c.nombre LIKE ? OR o.diagnostico_preliminar LIKE ?)');
+    END IF;
+    IF p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @query = CONCAT(@query, ' AND o.estado = ?');
+    END IF;
+    SET @query = CONCAT(@query, ' ORDER BY o.fecha_ingreso DESC');
+    PREPARE stmt FROM @query;
+    IF p_termino IS NOT NULL AND p_termino != '' AND p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @t = CONCAT('%', p_termino, '%');
+        SET @e = p_estado;
+        EXECUTE stmt USING @t, @t, @t, @t, @t, @t, @e;
+    ELSEIF p_termino IS NOT NULL AND p_termino != '' THEN
+        SET @t = CONCAT('%', p_termino, '%');
+        EXECUTE stmt USING @t, @t, @t, @t, @t, @t;
+    ELSEIF p_estado IS NOT NULL AND p_estado != '' THEN
+        SET @e = p_estado;
+        EXECUTE stmt USING @e;
+    ELSE
+        EXECUTE stmt;
+    END IF;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_insertar_orden (actualizada con tipo_servicio)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_insertar_orden`;
+DELIMITER //
+CREATE PROCEDURE `sp_insertar_orden`(
+    IN p_diagnostico_preliminar TEXT,
+    IN p_fecha_ingreso          DATETIME,
+    IN p_id_recepcionista       INT,
+    IN p_id_mecanico            INT,
+    IN p_placa_vehiculo         VARCHAR(15),
+    IN p_tipo_servicio          ENUM('REVISION','CLIENTE_TRAE_REPUESTO','REPUESTO_TIENDA')
+)
+BEGIN
+    INSERT INTO ordenes_servicio (
+        diagnostico_preliminar, estado, fecha_ingreso,
+        id_recepcionista, id_mecanico, placa_vehiculo, tipo_servicio
+    ) VALUES (
+        p_diagnostico_preliminar, 'RECIBIDO', p_fecha_ingreso,
+        p_id_recepcionista, p_id_mecanico, p_placa_vehiculo, p_tipo_servicio
+    );
+    SELECT LAST_INSERT_ID() AS id_orden;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_actualizar_orden (actualizada con tipo_servicio)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_actualizar_orden`;
+DELIMITER //
+CREATE PROCEDURE `sp_actualizar_orden`(
+    IN p_id_orden INT,
+    IN p_diagnostico_preliminar TEXT,
+    IN p_estado ENUM('RECIBIDO','EN PROCESO','LISTO','ENTREGADO','PENDIENTE','CANCELADO'),
+    IN p_id_mecanico INT,
+    IN p_placa_vehiculo VARCHAR(15),
+    IN p_costo_mano_obra DECIMAL(10,2),
+    IN p_tipo_servicio ENUM('REVISION','CLIENTE_TRAE_REPUESTO','REPUESTO_TIENDA')
+)
+BEGIN
+    UPDATE ordenes_servicio
+    SET diagnostico_preliminar = p_diagnostico_preliminar,
+        estado = p_estado,
+        id_mecanico = p_id_mecanico,
+        placa_vehiculo = p_placa_vehiculo,
+        costo_mano_obra = p_costo_mano_obra,
+        tipo_servicio = p_tipo_servicio,
+        fecha_entrega = IF(p_estado = 'ENTREGADO', NOW(), fecha_entrega)
+    WHERE id_orden = p_id_orden;
+END //
+DELIMITER ;
+
+-- ============================================================
+-- sp_obtener_ordenes_para_facturar (actualizada con LISTO y estado_activo)
+-- ============================================================
+DROP PROCEDURE IF EXISTS `sp_obtener_ordenes_para_facturar`;
+DELIMITER //
+CREATE PROCEDURE `sp_obtener_ordenes_para_facturar`()
+BEGIN
+    SELECT o.id_orden, o.fecha_ingreso, o.estado,
+           v.placa, v.marca, v.modelo,
+           c.id_cliente, c.nombre AS nombre_cliente
+    FROM ordenes_servicio o
+    INNER JOIN vehiculos v ON v.placa = o.placa_vehiculo
+    INNER JOIN clientes c ON c.id_cliente = v.id_cliente
+    WHERE o.estado IN ('ENTREGADO', 'LISTO')
+      AND o.estado_activo = 1
+      AND o.id_orden NOT IN (
+          SELECT id_orden FROM facturas WHERE estado_activo = 1
+      )
+    ORDER BY o.fecha_ingreso DESC;
 END //
 DELIMITER ;

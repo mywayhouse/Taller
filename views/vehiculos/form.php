@@ -113,4 +113,53 @@ $actionUrl = $esEdicion
 
 <script>
     const buscarClienteUrl = '<?= APP_URL ?>/vehiculos/buscarClienteAjax';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btnBuscar = document.getElementById('btnBuscarCliente');
+        const inputRtn  = document.getElementById('rtn_dni');
+        const idCliente = document.getElementById('id_cliente');
+        const infoDiv   = document.getElementById('clienteInfo');
+        const form      = document.getElementById('formVehiculo');
+
+        function buscarCliente() {
+            const rtn = inputRtn.value.trim();
+            if (!rtn) {
+                infoDiv.innerHTML = '<span style="color:red;">Ingrese un RTN/DNI.</span>';
+                idCliente.value = '';
+                return;
+            }
+            infoDiv.innerHTML = '<span style="color:#666;">Buscando...</span>';
+            fetch(buscarClienteUrl + '?rtn=' + encodeURIComponent(rtn))
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data.exito) {
+                        infoDiv.innerHTML = 'Cliente: ' + data.cliente.nombre;
+                        idCliente.value = data.cliente.id;
+                    } else {
+                        infoDiv.innerHTML = '<span style="color:red;">' + data.mensaje + '</span>';
+                        idCliente.value = '';
+                    }
+                })
+                .catch(function () {
+                    infoDiv.innerHTML = '<span style="color:red;">Error de conexión.</span>';
+                    idCliente.value = '';
+                });
+        }
+
+        btnBuscar.addEventListener('click', buscarCliente);
+
+        var timer = null;
+        inputRtn.addEventListener('input', function () {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(buscarCliente, 500);
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!idCliente.value) {
+                e.preventDefault();
+                infoDiv.innerHTML = '<span style="color:red;">Primero busque un cliente válido con el RTN/DNI.</span>';
+                inputRtn.focus();
+            }
+        });
+    });
 </script>

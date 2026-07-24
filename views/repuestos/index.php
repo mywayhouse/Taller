@@ -1,7 +1,9 @@
 <div class="toolbar">
-    <a href="<?= APP_URL ?>/repuestos/crear" class="btn btn-primary">
-        + Nuevo Repuesto
-    </a>
+    <?php if (\App\Helpers\AyudaAcceso::hasWriteAccess('repuestos')): ?>
+        <a href="<?= APP_URL ?>/repuestos/crear" class="btn btn-primary">
+            + Nuevo Repuesto
+        </a>
+    <?php endif; ?>
 </div>
 
 <div class="search-bar">
@@ -12,8 +14,8 @@
             <input type="checkbox" name="stock_bajo" value="1" <?= ($stockBajoChecked ?? '0') === '1' ? 'checked' : '' ?>>
             Stock bajo
         </label>
-        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
-        <a href="<?= APP_URL ?>/repuestos" class="btn btn-secondary btn-sm">Limpiar</a>
+        <button type="submit" class="btn btn-primary btn-sm" style="border:0;box-sizing:border-box;">Filtrar</button>
+        <a href="<?= APP_URL ?>/repuestos" class="btn btn-secondary btn-sm" style="box-sizing:border-box;">Limpiar</a>
     </form>
 </div>
 

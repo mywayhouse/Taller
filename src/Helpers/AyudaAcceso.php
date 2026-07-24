@@ -21,7 +21,7 @@ class AyudaAcceso
         'ordenes'     => ['ADMINISTRADOR', 'RECEPCIONISTA'],
         'repuestos'   => ['ADMINISTRADOR'],
         'proveedores' => ['ADMINISTRADOR'],
-        'facturas'    => ['ADMINISTRADOR'],
+        'facturas'    => ['ADMINISTRADOR', 'RECEPCIONISTA'],
         'usuarios'    => ['ADMINISTRADOR'],
     ];
 

@@ -7,6 +7,17 @@
     </a>
 </div>
 
+<form method="GET" action="<?= APP_URL ?>/clientes" class="search-bar">
+    <div class="search-row">
+        <input type="text" name="q" placeholder="Buscar por nombre, RTN o teléfono..."
+               value="<?= htmlspecialchars($q ?? '') ?>" class="form-control search-input">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <?php if (!empty($q)): ?>
+            <a href="<?= APP_URL ?>/clientes" class="btn btn-secondary">Limpiar</a>
+        <?php endif; ?>
+    </div>
+</form>
+
 <div class="table-responsive">
     <table class="table">
         <thead>

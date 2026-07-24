@@ -42,6 +42,11 @@
     margin-bottom: 5px;
 }
 
+.factura-seccion .table th,
+.factura-seccion .table td {
+    font-weight: 400;
+}
+
 .factura-titulo p {
     font-size: 14px;
     margin: 2px 0;

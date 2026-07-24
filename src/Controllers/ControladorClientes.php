@@ -17,12 +17,18 @@ class ControladorClientes extends Controlador
     public function index(): void
     {
         $this->requireAccess('clientes');
-        $clientes = $this->clienteModel->obtenerTodos();
+        $termino = trim($this->getGet('q', ''));
+        if ($termino !== '') {
+            $clientes = $this->clienteModel->buscar($termino);
+        } else {
+            $clientes = $this->clienteModel->obtenerTodos();
+        }
         $data = [
             'title'       => 'Listado de Clientes',
             'pageTitle'   => 'Clientes',
             'currentPage' => 'clientes',
             'clientes'    => $clientes,
+            'q'           => $termino,
         ];
         $this->renderWithLayout('clientes/index', $data);
     }

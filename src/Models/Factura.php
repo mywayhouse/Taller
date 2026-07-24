@@ -10,6 +10,13 @@ class Factura extends Modelo
         return $this->callProcedure('sp_listar_facturas');
     }
 
+    public function buscar(string $termino): array
+    {
+        return $this->callProcedure('sp_buscar_facturas', [
+            ':p_termino' => $termino,
+        ]);
+    }
+
     public function obtenerPorId(int $id): ?array
     {
         $result = $this->callProcedure('sp_obtener_factura_por_id', [

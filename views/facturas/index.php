@@ -1,8 +1,17 @@
 <div class="toolbar">
-    <a href="<?= APP_URL ?>/facturas/crear" class="btn btn-primary">
-        + Nueva Factura
-    </a>
+    <a href="<?= APP_URL ?>/facturas/crear" class="btn btn-primary">+ Nueva Factura</a>
 </div>
+
+<form method="GET" action="<?= APP_URL ?>/facturas" class="search-bar">
+    <div class="search-row">
+        <input type="text" name="q" placeholder="Buscar por N° factura, cliente o placa..."
+               value="<?= htmlspecialchars($q ?? '') ?>" class="form-control search-input">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <?php if (!empty($q)): ?>
+            <a href="<?= APP_URL ?>/facturas" class="btn btn-secondary">Limpiar</a>
+        <?php endif; ?>
+    </div>
+</form>
 
 <div class="table-responsive">
     <table class="table">
@@ -29,7 +38,7 @@
                 <?php foreach ($facturas as $factura): ?>
                     <tr>
                         <td><?= htmlspecialchars($factura['numero_factura']) ?></td>
-                        <td><?= htmlspecialchars($factura['fecha_emision']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($factura['fecha_emision'])) ?></td>
                         <td><?= htmlspecialchars($factura['nombre_cliente']) ?></td>
                         <td><?= htmlspecialchars($factura['placa']) ?></td>
                         <td>L. <?= number_format($factura['total_pagar'], 2) ?></td>

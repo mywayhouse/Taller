@@ -20,12 +20,18 @@ class ControladorFacturas extends Controlador
     public function index(): void
     {
         $this->requireAccess('facturas');
-        $facturas = $this->facturaModel->obtenerTodos();
+        $termino = trim($this->getGet('q', ''));
+        if ($termino !== '') {
+            $facturas = $this->facturaModel->buscar($termino);
+        } else {
+            $facturas = $this->facturaModel->obtenerTodos();
+        }
         $data = [
             'title'       => 'Listado de Facturas',
             'pageTitle'   => 'Facturación',
             'currentPage' => 'facturas',
             'facturas'    => $facturas,
+            'q'           => $termino,
         ];
         $this->renderWithLayout('facturas/index', $data);
     }
@@ -193,32 +199,46 @@ class ControladorFacturas extends Controlador
         $repuestos = $this->facturaModel->obtenerRepuestosPorOrden($factura['id_orden']);
 
         ob_start();
-        require_once VIEWS . '/facturas/ver.php';
+        require_once VIEWS . '/facturas/contenido.php';
         $content = ob_get_clean();
 
         $html = '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">';
         $html .= '<title>Factura ' . htmlspecialchars($factura['numero_factura']) . '</title>';
         $html .= '<style>
-            body { font-family: "Segoe UI", Arial, sans-serif; font-size: 13px; color: #333; margin: 20px; }
-            .factura-print { max-width: 800px; margin: 0 auto; padding: 20px; }
-            .factura-header { display: flex; justify-content: space-between; padding-bottom: 15px; margin-bottom: 15px; border-bottom: 2px solid #3b82f6; }
-            .factura-empresa h2 { color: #3b82f6; margin: 0 0 5px; }
-            .factura-empresa p { color: #666; font-size: 12px; margin: 2px 0; }
-            .factura-titulo { text-align: right; }
-            .factura-titulo h1 { color: #3b82f6; font-size: 24px; margin: 0 0 5px; }
-            .badge-active { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-            .badge-inactive { background: #fce4ec; color: #c62828; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-            .factura-seccion { border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-bottom: 12px; }
-            .factura-seccion h3 { font-size: 14px; color: #3b82f6; margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid #ddd; }
-            table { width: 100%; border-collapse: collapse; margin: 8px 0; }
-            th { background: #f1f5f9; text-align: left; padding: 6px 8px; font-size: 12px; border-bottom: 2px solid #ddd; }
-            td { padding: 6px 8px; border-bottom: 1px solid #eee; }
-            .text-center { text-align: center; }
-            .factura-totales { margin-top: 15px; max-width: 350px; margin-left: auto; }
-            .total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
-            .total-final { border-top: 2px solid #3b82f6; padding-top: 8px; font-size: 16px; font-weight: bold; color: #3b82f6; }
+            @page { margin: 12mm; }
+            body { font-family: "Helvetica", Arial, sans-serif; font-size: 11px; color: #1a1a1a; margin: 0; padding: 0; }
+            .factura-page { max-width: 750px; margin: 0 auto; padding: 5px 0; }
+            
+            .encabezado { text-align: center; margin-bottom: 12px; }
+            .empresa-nombre { font-size: 22px; font-weight: 900; color: #1a3a6b; letter-spacing: 3px; margin-bottom: 6px; text-transform: uppercase; }
+            .empresa { font-size: 10px; color: #1a3a6b; line-height: 1.6; }
+            
+            .linea { border-top: 2px dashed #1a3a6b; margin: 10px 0; }
+            
+            .bloque-info { width: 100%; border-collapse: collapse; margin: 12px 0; }
+            .bloque-info td { vertical-align: top; padding: 0; }
+            .col-izquierda { width: 45%; }
+            .col-derecha { width: 55%; }
+            .label { font-weight: 700; font-size: 10px; color: #1a3a6b; margin-bottom: 5px; letter-spacing: 0.5px; }
+            .valor { font-weight: 700; font-size: 12px; margin-bottom: 4px; }
+            .detalle { font-size: 10px; color: #444; line-height: 1.6; }
+            .datos-tabla { width: 100%; border-collapse: collapse; }
+            .datos-tabla td { padding: 1px 0; font-size: 10px; }
+            .dt-label { font-weight: 700; width: 100px; color: #1a1a1a; }
+            
+            .items-tabla { width: 100%; border-collapse: collapse; margin: 12px 0; }
+            .items-tabla th { background: #1a3a6b; color: #fff; font-size: 10px; font-weight: 700; padding: 7px 8px; letter-spacing: 0.5px; }
+            .items-tabla td { padding: 5px 8px; font-size: 10px; border-bottom: 1px solid #e0ddd8; }
+            .th-cant, .td-cant { width: 10%; text-align: center; }
+            .th-desc { width: 50%; }
+            .th-precio, .td-precio { width: 20%; text-align: right; }
+            .th-importe, .td-importe { width: 20%; text-align: right; }
+            
+            .totales { max-width: 300px; margin-left: auto; margin-top: 10px; }
+            .total-item { display: flex; justify-content: space-between; padding: 2px 0; font-size: 11px; }
+            .total-final { border-top: 2px solid #1a3a6b; margin-top: 4px; padding-top: 5px; font-size: 15px; font-weight: 700; color: #1a3a6b; }
         </style></head><body>';
-        $html .= '<div class="factura-print">' . $content . '</div>';
+        $html .= '<div class="factura-page">' . $content . '</div>';
         $html .= '</body></html>';
 
         $dompdf = new Dompdf();
