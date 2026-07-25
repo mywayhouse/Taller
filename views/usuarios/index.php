@@ -1,5 +1,7 @@
 <div class="toolbar">
-    <a href="<?= APP_URL ?>/usuarios/crear" class="btn btn-primary">+ Nuevo Usuario</a>
+    <button type="button" id="btn-nuevo-usuario" class="btn btn-primary">
+        + Nuevo Usuario
+    </button>
 </div>
 
 <form method="GET" action="<?= APP_URL ?>/usuarios" class="search-bar">
@@ -47,7 +49,16 @@
                             </span>
                         </td>
                         <td class="actions">
-                            <a href="<?= APP_URL ?>/usuarios/editar/<?= $u['id_usuario'] ?>" class="btn btn-sm btn-edit">Editar</a>
+                            <!-- Botón Editar adaptado a modal con data-attributes -->
+                            <button type="button"
+                                    class="btn btn-sm btn-edit btn-editar-usuario"
+                                    data-id="<?= $u['id_usuario'] ?>"
+                                    data-nombre="<?= htmlspecialchars($u['nombre'], ENT_QUOTES) ?>"
+                                    data-correo="<?= htmlspecialchars($u['correo'], ENT_QUOTES) ?>"
+                                    data-rol="<?= htmlspecialchars($u['rol'], ENT_QUOTES) ?>">
+                                Editar
+                            </button>
+
                             <?php if ((int)$u['id_usuario'] !== (int)($_SESSION['usuario_id'] ?? 0)): ?>
                             <form method="POST" action="<?= APP_URL ?>/usuarios/eliminar/<?= $u['id_usuario'] ?>" style="display:inline;" class="form-eliminar-usuario">
                                 <button type="button" class="btn btn-sm btn-delete"
@@ -62,6 +73,7 @@
     </table>
 </div>
 
+<!-- Modal Eliminar Usuario -->
 <div id="modal-eliminar-usuario" class="modal-overlay" style="display:none;">
     <div class="modal-box">
         <h3>Desactivar Usuario</h3>
@@ -73,6 +85,9 @@
         </div>
     </div>
 </div>
+
+<!-- Incluimos el formulario modal dentro del mismo index -->
+<?php require VIEWS . '/usuarios/form.php'; ?>
 
 <script>
 var formEliminarActual = null;

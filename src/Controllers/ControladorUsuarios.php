@@ -125,9 +125,23 @@ class ControladorUsuarios extends Controlador
         if (empty($correo)) $errores[] = 'El correo es obligatorio.';
         if (empty($rol)) $errores[] = 'El rol es obligatorio.';
         if (!in_array($rol, ['ADMINISTRADOR', 'RECEPCIONISTA', 'MECANICO'])) $errores[] = 'Rol inválido.';
+        
+        
+        
         $existente = $this->usuarioModel->obtenerPorCorreo($correo);
         if ($existente && $existente['id_usuario'] != $id) {
             $errores[] = 'El correo ya está en uso por otro usuario.';
+        }
+        if (!empty($contrasenia)) {
+            if (strlen($contrasenia) < 6) {
+                $errores[] = 'La contraseña debe tener al menos 6 caracteres.';
+            }
+            if (!preg_match('/[A-Z]/', $contrasenia)) {
+                $errores[] = 'La contraseña debe contener al menos una mayúscula.';
+            }
+            if (!preg_match('/[0-9]/', $contrasenia)) {
+                $errores[] = 'La contraseña debe contener al menos un número.';
+            }
         }
         if (!empty($errores)) {
             $_SESSION['errores'] = $errores;
