@@ -1,9 +1,14 @@
 <div class="toolbar">
+    <button type="button" class="btn btn-primary" onclick="abrirModalOrden()">+ Nueva orden</button>
+</div>
+
+<!--
+<div class="toolbar">
     <a href="<?= APP_URL ?>/ordenes/crear" class="btn btn-primary">
         + Nueva Orden
     </a>
 </div>
-
+-->
 <form method="GET" action="<?= APP_URL ?>/ordenes" class="search-bar">
     <div class="search-row">
         <input type="text" name="q" placeholder="Buscar por número de orden, placa, cliente, marca..."
@@ -65,11 +70,20 @@
                                 <?= $o['estado'] ?>
                             </span>
                         </td>
+                    
                         <td><?= htmlspecialchars($o['mecanico'] ?? '') ?></td>
                         <td><?= date('d/m/Y', strtotime($o['fecha_ingreso'])) ?></td>
                         <td class="actions">
                             <a href="<?= APP_URL ?>/ordenes/ver/<?= $o['id_orden'] ?>" class="btn btn-sm btn-info">Ver</a>
+                            <!--
+                            <a href="<?= APP_URL ?>/ordenes/ver/<?= $o['id_orden'] ?>" class="btn btn-sm btn-info">Ver</a>
+                            -->
+                            <button type="button" class="btn btn-sm btn-edit" onclick="abrirModalOrden(<?= $o['id_orden'] ?>)">
+                                Editar
+                            </button>
+                            <!--
                             <a href="<?= APP_URL ?>/ordenes/editar/<?= $o['id_orden'] ?>" class="btn btn-sm btn-edit">Editar</a>
+                            -->
                             <a href="<?= APP_URL ?>/ordenes/eliminar/<?= $o['id_orden'] ?>"
                                class="btn btn-sm btn-delete"
                                onclick="return confirm('¿Está seguro de eliminar esta orden?')">Eliminar</a>

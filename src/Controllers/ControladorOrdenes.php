@@ -225,4 +225,40 @@ class ControladorOrdenes extends Controlador
         }
         exit;
     }
+    public function form(int $id = null): void
+{
+    $this->requireAccess('ordenes');
+    $this->requireWriteAccess('ordenes');
+
+    $orden = [];
+    if ($id) {
+        $orden = $this->ordenModel->obtenerPorId($id);
+        if (!$orden) {
+            echo "<p class='text-error'>Orden no encontrada.</p>";
+            return;
+        }
+    }
+
+    $usuarios = $this->listarUsuarios();
+    $vehiculos = $this->vehiculoModel->obtenerTodos();
+
+    $data = [
+        'orden'     => $orden,
+        'vehiculos' => $vehiculos,
+        'usuarios'  => $usuarios,
+        'errores'   => $_SESSION['errores'] ?? [],
+    ];
+    
+    unset($_SESSION['errores']);
+
+    $formPath = VIEWS . '/ordenes/form.php';
+    if (file_exists($formPath)) {
+        extract($data);
+        include $formPath;
+    } else {
+        echo "<p class='text-error'>No se encontró la vista del formulario de órdenes.</p>";
+    }
 }
+}
+
+

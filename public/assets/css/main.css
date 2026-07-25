@@ -966,24 +966,39 @@ ul { list-style: none; }
 }
 /*FORMULARIO PÁRA INGRESAR DATOS GENERAL*/
 .modal {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
 .modal.show {
     opacity: 1;
     visibility: visible;
 }
 
+/* Contenedor principal del modal */
 .modal .modal-content {
+    background: #fff;
+    width: 90% !important;
+    max-width: 650px !important;
+    max-height: 85vh !important;
+    height: auto !important;
+    border-radius: 8px;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
     transform: translateY(-20px);
     transition: transform 0.3s ease;
 }
@@ -991,20 +1006,39 @@ ul { list-style: none; }
 .modal.show .modal-content {
     transform: translateY(0);
 }
-.modal-content {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.modal-header {
+/* Cabecera fija del modal */
+.modal .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    padding: 15px 20px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+/* Cuerpo con scroll independiente (abarca el form o el modal-body) */
+.modal .modal-content form,
+.modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important;
+    max-height: calc(85vh - 130px) !important;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* Pie de página / Botones fijos abajo */
+.modal .modal-footer,
+.modal .form-actions {
+    padding: 15px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .close-btn {
