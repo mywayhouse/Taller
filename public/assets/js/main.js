@@ -2,7 +2,6 @@
  * main.js — Scripts globales del sistema
  */
 'use strict';
-
 document.addEventListener('DOMContentLoaded', function () {
     
     // ============================================================
@@ -121,4 +120,39 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 500);
         }, 5000);
     });
+});
+
+//FORMULARIO PARA INGRESAR DATOS
+function abrirModalGlobal(titulo) {
+    document.getElementById('globalModalTitle').textContent = titulo;
+    const modal = document.getElementById('globalModal');
+    
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+}
+
+function cerrarModalGlobal() {
+    const modal = document.getElementById('globalModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.getElementById('globalModalBody').innerHTML = '';
+        }, 200);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('globalModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                cerrarModalGlobal();
+            }
+        });
+    }
 });

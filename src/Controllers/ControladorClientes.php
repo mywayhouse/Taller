@@ -119,6 +119,33 @@ class ControladorClientes extends Controlador
         $this->redirect('clientes');
     }
 
+    public function form(int $id = null): void
+    {
+        $this->requireAccess('clientes');
+        $this->requireWriteAccess('clientes');
+
+        $cliente = [];
+        if ($id) {
+            $cliente = $this->clienteModel->obtenerPorId($id);
+            if (!$cliente) {
+                echo "<p class='text-error'>Cliente no encontrado.</p>";
+                return;
+            }
+        }
+
+        $data = [
+            'cliente' => $cliente,
+            'errores' => [],
+        ];
+
+        $formPath = VIEWS . '/clientes/form.php';
+        if (file_exists($formPath)) {
+            extract($data);
+            include $formPath;
+        } else {
+            echo "<p class='text-error'>No se encontró la vista del formulario.</p>";
+        }
+    }
     private function showError(int $code, string $message): void
     {
         http_response_code($code);

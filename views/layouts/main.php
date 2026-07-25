@@ -16,6 +16,11 @@
 
 <!--LLAMADA A LA LIBRERIA DE CHARTS-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    if (typeof window.APP_URL === 'undefined') {
+        window.APP_URL = "<?= APP_URL ?>";
+    }
+</script>
 </head>
 <body>
     <div class="layout-wrapper">
@@ -181,9 +186,21 @@
             <?php endif; ?>
         </main>
     </div>
-
+    <div id="globalModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="globalModalTitle">Título del Modal</h3>
+                <button type="button" class="close-btn" onclick="cerrarModalGlobal()">&times;</button>
+            </div>
+            <!-- El cuerpo del modal donde se inyectarán los formularios -->
+            <div id="globalModalBody">
+                <!-- Aquí carga el formulario-->
+            </div>
+        </div>
+    </div>
     <!-- JS Global -->
     <script src="<?= PUBLIC_URL ?>/assets/js/main.js"></script>
+    <script src="<?= PUBLIC_URL ?>/assets/js/clientes.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
 </body>
 </html>

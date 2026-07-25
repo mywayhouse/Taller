@@ -2,9 +2,14 @@
      Vista: Listado de Clientes
      ============================================================ -->
 <div class="toolbar">
+    <button type="button" class="btn btn-primary" onclick="abrirModalCliente()">
+    + Nuevo Cliente
+</button>
+<!--
     <a href="<?= APP_URL ?>/clientes/crear" class="btn btn-primary">
         + Nuevo Cliente
     </a>
+-->
 </div>
 
 <form method="GET" action="<?= APP_URL ?>/clientes" class="search-bar">
@@ -50,9 +55,14 @@
                             </span>
                         </td>
                         <td class="actions">
+                            <button type="button" class="btn btn-sm btn-edit" onclick="abrirModalCliente(<?= $cliente['id_cliente'] ?>)">
+                                Editar
+                            </button>
+                        <!--
                             <a href="<?= APP_URL ?>/clientes/editar/<?= $cliente['id_cliente'] ?>" class="btn btn-sm btn-edit">
                                 Editar
                             </a>
+                        -->
                             <a href="<?= APP_URL ?>/clientes/eliminar/<?= $cliente['id_cliente'] ?>"
                                class="btn btn-sm btn-delete"
                                onclick="return confirm('¿Desactivar este cliente?')">

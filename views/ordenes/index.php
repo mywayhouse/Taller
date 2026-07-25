@@ -68,7 +68,7 @@
                         <td><?= htmlspecialchars($o['mecanico'] ?? '') ?></td>
                         <td><?= date('d/m/Y', strtotime($o['fecha_ingreso'])) ?></td>
                         <td class="actions">
-                            <a href="<?= APP_URL ?>/ordenes/ver/<?= $o['id_orden'] ?>" class="btn btn-sm btn-edit">Ver</a>
+                            <a href="<?= APP_URL ?>/ordenes/ver/<?= $o['id_orden'] ?>" class="btn btn-sm btn-info">Ver</a>
                             <a href="<?= APP_URL ?>/ordenes/editar/<?= $o['id_orden'] ?>" class="btn btn-sm btn-edit">Editar</a>
                             <a href="<?= APP_URL ?>/ordenes/eliminar/<?= $o['id_orden'] ?>"
                                class="btn btn-sm btn-delete"
