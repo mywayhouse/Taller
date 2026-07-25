@@ -1,15 +1,15 @@
 <div class="toolbar">
     <?php if (\App\Helpers\AyudaAcceso::hasWriteAccess('repuestos')): ?>
-        <a href="<?= APP_URL ?>/repuestos/crear" class="btn btn-primary">
+        <!-- Reemplazamos el <a> por un <button> con id -->
+        <button type="button" id="btn-nuevo-repuesto" class="btn btn-primary">
             + Nuevo Repuesto
-        </a>
+        </button>
     <?php endif; ?>
 </div>
 
 <div class="search-bar">
     <form method="GET" action="<?= APP_URL ?>/repuestos" class="search-form">
-        <input type="text" name="q" placeholder="Buscar repuesto..." value="<?= htmlspecialchars($q ?? '') ?>"
-               class="search-input">
+        <input type="text" name="q" placeholder="Buscar repuesto..." value="<?= htmlspecialchars($q ?? '') ?>" class="search-input">
         <label class="checkbox-label">
             <input type="checkbox" name="stock_bajo" value="1" <?= ($stockBajoChecked ?? '0') === '1' ? 'checked' : '' ?>>
             Stock bajo
@@ -64,7 +64,18 @@
                             </span>
                         </td>
                         <td class="actions">
-                            <a href="<?= APP_URL ?>/repuestos/editar/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-edit">Editar</a>
+                            <!-- Botón Editar con data-attributes -->
+                            <button type="button" 
+                                    class="btn btn-sm btn-edit btn-editar-repuesto"
+                                    data-id="<?= $r['id_repuesto'] ?>"
+                                    data-nombre="<?= htmlspecialchars($r['nombre']) ?>"
+                                    data-stock-actual="<?= $r['stock_actual'] ?>"
+                                    data-stock-minimo="<?= $r['stock_minimo'] ?>"
+                                    data-unidad="<?= htmlspecialchars($r['unidad_medida'] ?? '') ?>"
+                                    data-precio="<?= $r['precio_venta'] ?>">
+                                Editar
+                            </button>
+
                             <a href="<?= APP_URL ?>/repuestos/movimientos/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-info">Mov.</a>
                             <a href="<?= APP_URL ?>/repuestos/eliminar/<?= $r['id_repuesto'] ?>"
                                class="btn btn-sm btn-delete"
@@ -76,3 +87,6 @@
         </tbody>
     </table>
 </div>
+
+<!-- Incluimos el formulario modal dentro del mismo index -->
+<?php require VIEWS . '/repuestos/form.php'; ?>
