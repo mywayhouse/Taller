@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="<?= PUBLIC_URL ?>/assets/css/facturas.css">
-
+<div class="toolbar">
+    <a href="<?= APP_URL ?>/facturas" class="btn btn-secondary">← Volver al historial de facturas</a>
+</div>
 <div class="factura-wrapper">
     <div class="factura-print">
         <div class="factura-header">
@@ -114,7 +116,7 @@
 <div class="toolbar" style="display:flex;justify-content:space-between;align-items:center;margin-top:15px;">
     <a href="<?= APP_URL ?>/facturas/pdf/<?= $factura['id_factura'] ?>" class="btn btn-primary" target="_blank">Descargar PDF</a>
     <div>
-        <a href="<?= APP_URL ?>/facturas" class="btn btn-secondary">← Volver</a>
+        
         <?php if ($factura['estado_activo'] ?? 1): ?>
             <a href="#" class="btn btn-delete" onclick="mostrarModalAnular(event)">Cancelar Factura</a>
         <?php endif; ?>

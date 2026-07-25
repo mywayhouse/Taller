@@ -61,8 +61,16 @@
 
                             <?php if ((int)$u['id_usuario'] !== (int)($_SESSION['usuario_id'] ?? 0)): ?>
                             <form method="POST" action="<?= APP_URL ?>/usuarios/eliminar/<?= $u['id_usuario'] ?>" style="display:inline;" class="form-eliminar-usuario">
-                                <button type="button" class="btn btn-sm btn-delete"
-                                        onclick="mostrarModalEliminar(this, '<?= htmlspecialchars($u['nombre'], ENT_QUOTES) ?>')">Eliminar</button>
+                            <form method="POST" action="<?= APP_URL ?>/usuarios/eliminar/<?= $u['id_usuario'] ?>" style="display:inline;">
+                                <button type="button" 
+                                        class="btn btn-sm btn-delete btn-confirmar-accion"
+                                        data-titulo="Desactivar Usuario"
+                                        data-mensaje="¿Desactivar este usuario?"
+                                        data-detalle="<?= htmlspecialchars($u['nombre'], ENT_QUOTES) ?>"
+                                        data-btn-texto="Sí, desactivar">
+                                    Eliminar
+                                </button>
+                            </form>
                             </form>
                             <?php endif; ?>
                         </td>

@@ -159,7 +159,7 @@
             </div>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
+<!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
             <!-- Mensajes flash -->
             <?php if (isset($_SESSION['mensaje'])): ?>
@@ -186,6 +186,8 @@
             <?php endif; ?>
         </main>
     </div>
+
+    <!-- Modal Formulario Global -->
     <div id="globalModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
@@ -198,7 +200,24 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Confirmación Global -->
+    <div id="modal-confirmar-accion" class="modal-overlay" style="display:none;">
+        <div class="modal-box confirmation-box">
+            <div class="modal-alert-icon">
+                <span class="material-icons-outlined">warning_amber</span>
+            </div>
+            <h3 id="modal-confirm-titulo">Eliminar Vehículo</h3>
+            <p id="modal-confirm-mensaje">¿Está seguro de eliminar este vehículo?</p>
+            <p class="modal-detalle-wrapper"><span id="modal-confirm-detalle">Placa: HAA1001</span></p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="btn-cancelar-confirmacion">Cancelar</button>
+                <button type="button" class="btn btn-danger-modal" id="btn-aceptar-confirmacion">Sí, continuar</button>
+            </div>
+        </div>
+    </div>
     <!-- JS Global -->
+    <script src="<?= PUBLIC_URL ?>/assets/js/modalD.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/main.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/ordenes.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/repuestos.js"></script>

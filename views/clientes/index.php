@@ -63,11 +63,13 @@
                                 Editar
                             </a>
                         -->
-                            <a href="<?= APP_URL ?>/clientes/eliminar/<?= $cliente['id_cliente'] ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Desactivar este cliente?')">
-                                Eliminar
-                            </a>
+                        <a href="<?= APP_URL ?>/clientes/eliminar/<?= $cliente['id_cliente'] ?>"
+                        class="btn btn-sm btn-delete btn-confirmar-accion"
+                        data-titulo="Desactivar Cliente"
+                        data-mensaje="¿Desactivar este cliente?"
+                        data-detalle="<?= htmlspecialchars($cliente['nombre'], ENT_QUOTES) ?>">
+                            Eliminar
+                        </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

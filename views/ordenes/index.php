@@ -85,8 +85,12 @@
                             <a href="<?= APP_URL ?>/ordenes/editar/<?= $o['id_orden'] ?>" class="btn btn-sm btn-edit">Editar</a>
                             -->
                             <a href="<?= APP_URL ?>/ordenes/eliminar/<?= $o['id_orden'] ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Está seguro de eliminar esta orden?')">Eliminar</a>
+                            class="btn btn-sm btn-delete btn-confirmar-accion"
+                            data-titulo="Eliminar Orden"
+                            data-mensaje="¿Está seguro de eliminar esta orden?"
+                            data-detalle="Orden #<?= $o['id_orden'] ?>">
+                                Eliminar
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

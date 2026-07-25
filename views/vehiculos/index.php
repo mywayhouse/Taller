@@ -40,9 +40,13 @@
                         <td><?= htmlspecialchars($v['nombre_cliente']) ?></td>
                         <td class="actions">
                             <a href="<?= APP_URL ?>/vehiculos/editar/<?= urlencode($v['placa']) ?>" class="btn btn-sm btn-edit">Editar</a>
-                            <a href="<?= APP_URL ?>/vehiculos/eliminar/<?= urlencode($v['placa']) ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Está seguro de eliminar este vehículo?')">Eliminar</a>
+                        <a href="<?= APP_URL ?>/vehiculos/eliminar/<?= urlencode($v['placa']) ?>"
+                        class="btn btn-sm btn-delete btn-confirmar-accion"
+                        data-titulo="Eliminar Vehículo"
+                        data-mensaje="¿Está seguro de eliminar este vehículo?"
+                        data-detalle="Placa: <?= htmlspecialchars($v['placa'], ENT_QUOTES) ?>">
+                            Eliminar
+                        </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

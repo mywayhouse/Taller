@@ -78,8 +78,12 @@
 
                             <a href="<?= APP_URL ?>/repuestos/movimientos/<?= $r['id_repuesto'] ?>" class="btn btn-sm btn-info">Mov.</a>
                             <a href="<?= APP_URL ?>/repuestos/eliminar/<?= $r['id_repuesto'] ?>"
-                               class="btn btn-sm btn-delete"
-                               onclick="return confirm('¿Desactivar este repuesto?')">Eliminar</a>
+                            class="btn btn-sm btn-delete btn-confirmar-accion"
+                            data-titulo="Desactivar Repuesto"
+                            data-mensaje="¿Desactivar este repuesto?"
+                            data-detalle="<?= htmlspecialchars($r['nombre'], ENT_QUOTES) ?>">
+                                Eliminar
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

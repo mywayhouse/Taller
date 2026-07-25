@@ -53,11 +53,14 @@
                                 Ver
                             </a>
                             <?php if ($factura['estado_activo'] ?? 1): ?>
-                                <a href="<?= APP_URL ?>/facturas/anular/<?= $factura['id_factura'] ?>"
-                                   class="btn btn-sm btn-delete"
-                                   onclick="return confirm('¿Anular esta factura?')">
-                                    Anular
-                                </a>
+                            <a href="<?= APP_URL ?>/facturas/anular/<?= $factura['id_factura'] ?>"
+                            class="btn btn-sm btn-delete btn-confirmar-accion"
+                            data-titulo="Anular Factura"
+                            data-mensaje="¿Anular esta factura?"
+                            data-btn-texto="Sí, anular"
+                            data-detalle="Factura #<?= $factura['id_factura'] ?>">
+                                Anular
+                            </a>
                             <?php endif; ?>
                         </td>
                     </tr>

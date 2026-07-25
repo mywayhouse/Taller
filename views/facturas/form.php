@@ -1,4 +1,5 @@
 <?php if (!empty($errores)): ?>
+
     <div class="alert alert-error">
         <ul>
             <?php foreach ($errores as $error): ?>
@@ -7,7 +8,9 @@
         </ul>
     </div>
 <?php endif; ?>
-
+    <div class="toolbar">
+        <a href="<?= APP_URL ?>/facturas" class="btn btn-secondary">← Volver al historial de facturas</a>
+    </div>
 <div class="factura-wrapper">
     <div class="factura-header">
         <div class="factura-empresa">
@@ -153,7 +156,7 @@
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Generar Factura</button>
-                    <a href="<?= APP_URL ?>/facturas" class="btn btn-secondary">Cancelar</a>
+                    <a href="<?= APP_URL ?>/facturas" class="btn btn-delete">Cancelar</a>
                 </div>
             </div>
         </div>

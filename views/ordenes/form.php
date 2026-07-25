@@ -48,8 +48,9 @@
                 <div class="input-group">
                     <input type="text" id="rtn_dni" name="rnt_dni" class="form-control"
                            placeholder="Ingrese RTN/DNI" maxlength="20"
-                           value="<?= htmlspecialchars($orden['rnt_dni'] ?? '') ?>">
-                    <button type="button" id="btnBuscarCliente" class="btn btn-secondary">Buscar</button>
+                           value="<?= htmlspecialchars($orden['rnt_dni'] ?? '') ?>"
+                           ">
+                    <button type="button" id="btnBuscarCliente" class="btn btn-secondary" style="margin-top: 10px;">Buscar</button>
                 </div>
                 <div id="clienteInfo" style="margin-top:5px; font-weight:bold;"></div>
                 <input type="hidden" name="id_cliente" id="id_cliente" value="">
