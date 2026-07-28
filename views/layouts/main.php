@@ -222,6 +222,7 @@
     <script src="<?= PUBLIC_URL ?>/assets/js/ordenes.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/repuestos.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/usuarios.js"></script>
+    <script src="<?= PUBLIC_URL ?>/assets/js/vehiculos.js"></script>
     <script src="<?= PUBLIC_URL ?>/assets/js/<?= $currentPage ?? 'dashboard' ?>.js"></script>
 </body>
 </html>
